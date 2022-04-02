@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.13)
 # Set our project and CPU specific flags, options, definitions and Linker Settings
 #####################################################################################
 # Project name
-set(PROJECT_NAME "NEW_PROJECT")
+set(PROJECT_NAME "rtic")
 
 # Desired executable name
 set(EXECUTABLE_NAME ${PROJECT_NAME})
@@ -23,7 +23,7 @@ set(ENABLE_SEGGER_RTT false)
 set(MCU_TARGET LPC5526)
 
 # Set our specific CPU compiler flags
-set(COMPILER_CPU_FLAGS "-mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16")
+set(COMPILER_CPU_FLAGS "-mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16")
 
 # Set any libraries you would need to link against (.a libs, gcc, c, m, nosys as examples)
 # NOT TO BE CONFUSED WITH LINKER FLAGS. FLAGS BELONG IN the flags.cmake file
@@ -31,27 +31,33 @@ set(LINKER_STATIC_LIBRARIES
 )
 
 # Specify the location of our Linker file
-set(CPU_LINKER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/src/board/LINKER_FILE.ld)
+set(CPU_LINKER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/src/board/STM32F412RETX_FLASH.ld)
 
 # Set debug build specific definitions
-set(DEBUG_BUILD_DEFINITIONS -DDEBUG_BUILD)
+set(DEBUG_BUILD_DEFINITIONS -DDEBUG_BUILD -DUSE_HAL_DRIVER -DSTM32F412Rx)
 
 # Set release build specific definitions
-set(RELEASE_BUILD_DEFINITIONS -DRELEASE_BUILD)
+set(RELEASE_BUILD_DEFINITIONS -DRELEASE_BUILD -DUSE_HAL_DRIVER -DSTM32F412Rx)
 
 # Create a list of our APP source
-set(APP_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/board/board.c
+set(APP_SRC
 )
 
 # Glob together a list of our SDK source
 FILE(GLOB SDK_SRC
-            # ${CMAKE_CURRENT_SOURCE_DIR}/vendor/MANUF/src/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Startup/*.s
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Src/*.c
 )
 
 # Set all of our application and SDK include paths
 set(INCLUDE_DIRS    ${CMAKE_CURRENT_SOURCE_DIR}/src/
                     ${CMAKE_CURRENT_SOURCE_DIR}/src/board
+                    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Inc
+                    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc
+                    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
+                    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+                    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Include           
 )
 
 # Add any subdirectories with CMake projects that should be added
