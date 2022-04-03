@@ -1,23 +1,15 @@
-/******************************************************************************
-Main program entry point
-Copyright (c) 2022 ENTITY NAME
-main.c
-*******************************************************************************/
-
 #include <stdio.h>
-#include "error.h"
 #include "board.h"
 
-void main(void) {
-    app_return_code_t ret = APP_RET_OK;
+void main(void)
+{
+  initBoard();
 
-    // Initialze the board peripherals
-    BOARD_Init();
+  serialTxString("\"initBoard\" complete.\r\n");
 
-    // Other init code
-
-    // Start running the application code
-    while(1) {
-        BOARD_DelayTicks(1000);
-    }
+  while(1)
+  {
+    toggleHeartbeat();
+    delayMs(500u);
+  }
 }

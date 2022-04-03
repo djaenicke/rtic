@@ -1,29 +1,16 @@
-/******************************************************************************
-Board level definitions
-Copyright (c) 2022 ENTITY NAME
-board.h
-*******************************************************************************/
-
-#ifndef _BOARD_H_
-#define _BOARD_H_
+#ifndef BOARD_H
+#define BOARD_H (1)
 
 #include <stdint.h>
+#include "io.h"
+#include "stm32f4xx_hal.h"
 
-/*!
- * @brief Execute all board specific initialization and setup
- */
-void BOARD_Init(void);
+void initBoard(void);
 
-/*!
- * @brief Delay the specified number of ticks
- * @param[in] n: Number of ticks to delay
- */
-void BOARD_DelayTicks(uint32_t n);
+void serialTxString(const char* const string);
 
-/*!
- * @brief Retrieve the current global tick counter value
- * @return Return the current global tick counter
- */
-uint32_t BOARD_GetTick(void);
+void toggleHeartbeat(void);
 
-#endif /* _BOARD_H_ */
+void delayMs(const uint32_t delay_ms);
+
+#endif // BOARD_H

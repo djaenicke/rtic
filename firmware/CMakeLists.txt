@@ -41,6 +41,8 @@ set(RELEASE_BUILD_DEFINITIONS -DRELEASE_BUILD -DUSE_HAL_DRIVER -DSTM32F412Rx)
 
 # Create a list of our APP source
 set(APP_SRC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/board.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
 )
 
 # Glob together a list of our SDK source
@@ -51,13 +53,14 @@ FILE(GLOB SDK_SRC
 )
 
 # Set all of our application and SDK include paths
-set(INCLUDE_DIRS    ${CMAKE_CURRENT_SOURCE_DIR}/src/
-                    ${CMAKE_CURRENT_SOURCE_DIR}/src/board
-                    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Inc
-                    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc
-                    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
-                    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Device/ST/STM32F4xx/Include
-                    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Include           
+set(INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/board
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Include           
 )
 
 # Add any subdirectories with CMake projects that should be added

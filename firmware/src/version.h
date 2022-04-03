@@ -1,11 +1,5 @@
-/******************************************************************************
-Header file for application version and debug/release flag
-Copyright (c) 2022 ENTITY NAME
-version.h
-*******************************************************************************/
-
-#ifndef _VERSION_H_
-#define _VERSION_H_
+#ifndef VERSION_H
+#define VERSION_H
 
 // https://semver.org/
 #define VERSION_MAJOR   0 /*! @brief Major Version Number */
@@ -14,9 +8,9 @@ version.h
 
 // If applicable a DEBUG version can be used
 #ifdef DEBUG_BUILD
-    #define VERSION_DEBUG   1 /*! @brief Debug Version */
+  #define VERSION_DEBUG   1 /*! @brief Debug Version */
 #else
-    #define VERSION_DEBUG   0 /*! @brief NON Debug Version */
+  #define VERSION_DEBUG   0 /*! @brief NON Debug Version */
 #endif
 
-#endif // _VERSION_H_
+#endif // VERSION_H

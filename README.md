@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">{PROJECT_NAME}</h1>
+  <h1 align="center">RTIC</h1>
 </p>
 
 ### Tools Setup ✔️
