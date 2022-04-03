@@ -15,9 +15,9 @@ _deps
 *.hex
 *.bin
 *.elf
-build/
-out/
-output/
+firmware/build/
+firmware/out/
+firmware/output/
 *.o
 *.map
 build_log.txt
