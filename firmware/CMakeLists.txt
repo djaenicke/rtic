@@ -126,8 +126,6 @@ endif()
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/clang.cmake)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dfu.cmake)
-
 if(ENABLE_SEGGER_RTT)
     message(STATUS "Adding the Segger RTT library")
     # Include our Segger RTT include directory
