@@ -52,10 +52,15 @@ FILE(GLOB SDK_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Src/*.c
 )
 
-# Set all of our application and SDK include paths
-set(INCLUDE_DIRS
+# Set all of our application include paths
+set(APP_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board
+)
+
+# Set all of our application and SDK include paths
+set(INCLUDE_DIRS
+    ${APP_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
@@ -119,6 +124,10 @@ if(CMAKE_BUILD_TYPE STREQUAL release)
     target_compile_definitions(${EXECUTABLE_NAME} PUBLIC ${RELEASE_BUILD_DEFINITIONS})
 endif()
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/clang.cmake)
+
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dfu.cmake)
+
 if(ENABLE_SEGGER_RTT)
     message(STATUS "Adding the Segger RTT library")
     # Include our Segger RTT include directory
@@ -172,3 +181,9 @@ add_custom_target(flash ${DEBUG_FLASH_CMD})
 
 # Add a makefile "target" for running unit tests
 add_custom_target(test cd ../ && ceedling gcov:all utils:gcov)
+
+# Add a makefile "target" to format the code
+add_custom_target(format ${FORMAT_CMD})
+
+# Add a makefile "target" to download the binary using the DFU
+add_custom_target(dfu dfu-util -a 0 -s 0x08000000 -D ${EXECUTABLE_OUTPUT_PATH}/${EXECUTABLE_NAME}-${CMAKE_BUILD_TYPE}-${firmware_version}.bin)

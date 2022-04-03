@@ -117,4 +117,4 @@
 #define IMU_SDA_PIN GPIO_PIN_9
 #define IMU_SDA_GPIO_PORT GPIOB
 
-#endif // IO_H
+#endif  // IO_H

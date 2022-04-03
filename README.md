@@ -14,7 +14,15 @@ To flash and debug the target this project uses a couple of different tools. PyO
 -   [VScode](https://code.visualstudio.com/)
 -   [ARM Developer Extension Pack for VScode](https://marketplace.visualstudio.com/items?itemName=Glasslabs.arm-developer-toolkit)
 
+As an alternative to PyOCD or Segger JLink, dfu-util can be used to program the board using the built in DFU capability of the bootloader.
+-   [dfu-util](https://manpages.ubuntu.com/manpages/xenial/man1/dfu-util.1.html)
+    - Linux - ```sudo apt-get install dfu-util```
+
 ***NOTE: After installing your desired debug toolset, please ensure the chosen application is accessible from the command line (pyocd or JLinkExe)***
+
+To format all source files, you will need to install Clang-Format.
+-   [Clang-Format](https://clang.llvm.org/docs/ClangFormat.html)
+    - Linux - ```sudo apt-get install clang-format```
 
 To write and execute unit tests on the firmware source, you will need to install the Ceedling unit test framework and the Python package gcovr to generate Cobertura html reports. Ceedling is a Ruby Gem, so Ruby must first be installed on your system. GCC and Make are also needed. If the developer is on Windows, you can find install instructions above.
 -   [Ruby](https://www.ruby-lang.org)
@@ -55,19 +63,29 @@ To compile the source:
 make -j8
 ```
 
-To erase the connected target:
+To erase the connected target with PyOCD or Segger JLink:
 ```console
 make erase
 ```
 
-To flash the connected target:
+To flash the connected target with PyOCD or Segger JLink:
 ```console
 make flash
+```
+
+To flash the connected target via DFU:
+```console
+make dfu
 ```
 
 To execute unit tests:
 ```console
 make test
+```
+
+To format source files:
+```console
+make format
 ```
 
 ### Source Documentation Style 📃

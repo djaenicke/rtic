@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "board.h"
 
 void main(void)
@@ -7,7 +6,7 @@ void main(void)
 
   serialTxString("\"initBoard\" complete.\r\n");
 
-  while(1)
+  while (1)
   {
     toggleHeartbeat();
     delayMs(500u);
