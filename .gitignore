@@ -11,6 +11,9 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
+# KiCad backup files
+*bak
+
 # Build artifacts
 *.hex
 *.bin
