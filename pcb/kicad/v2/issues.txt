@@ -1,0 +1,7 @@
+Issues:
+
+   - 12V connector is reversed
+   - Overvoltage protection does not work
+   - D5 is undersized
+   - VR10S3V3 requires a minimum of 6V at input, so USB alone will not power the board
+   - silkscreen rectangle for NRF24L01 is placed properly

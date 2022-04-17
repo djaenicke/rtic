@@ -10,9 +10,10 @@ When documenting a File. A ```@file``` keyword is used for the Filename folowed 
 ```
 
 #### Variables & Macros
-When documenting a variable or macro the comment should be placed on the same line following the definition using the ```@brief``` keyword
+When documenting a variable or macro the comment should be placed on the line before the definition using the ```@brief``` keyword
 ```c
-#define MCP342x_LSB_VAL (0.0000625) /*! @brief LSB Value in Volts of a sampled output code */
+/*! @brief LSB Value in Volts of a sampled output code */
+#define MCP342x_LSB_VAL (0.0000625)
 ```
 
 #### Typedef Enums, Structs and Unions

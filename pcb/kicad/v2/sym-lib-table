@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name rtic_v1-rescue)(type Legacy)(uri ${KIPRJMOD}/rtic_v1-rescue.lib)(options "")(descr ""))
+  (lib (name rtic_v2-rescue)(type Legacy)(uri ${KIPRJMOD}/rtic_v2-rescue.lib)(options "")(descr ""))
+)

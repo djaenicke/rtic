@@ -29,21 +29,21 @@ jobs:
     - name: Setup & Build - RELEASE
       run: |
         export PATH=$PATH:~/gcc-arm-none-eabi-10-2020-q4-major/bin
-        ./setup.sh release
+        cd firmware &&./setup.sh release
         cd build && make -j8
 
     - name: Setup & Build - DEBUG
       run: |
         export PATH=$PATH:~/gcc-arm-none-eabi-10-2020-q4-major/bin
-        ./setup.sh
+        cd firmware && ./setup.sh
         cd build && make -j8
 
     - name: Run Unit tests
-      run: cd build && make test
+      run: cd firmware/build && make test
 
     - uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_REPO_TOKEN }}
         files: ./build/artifacts/gcov/GcovCoverageCobertura.xml
-        fail_ci_if_error: true # optional (default = false)
+        fail_ci_if_error: false # optional (default = false)
         verbose: true # optional (default = false)
