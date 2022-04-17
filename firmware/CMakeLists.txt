@@ -48,6 +48,7 @@ set(APP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/hw_timer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/pwm.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612/tb6612.cpp
 )
 
 # Glob together a list of our SDK source
@@ -61,6 +62,7 @@ FILE(GLOB SDK_SRC
 set(APP_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612
 )
 
 # Set all of our application and SDK include paths

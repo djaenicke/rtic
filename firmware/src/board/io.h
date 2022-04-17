@@ -6,6 +6,30 @@
 
 #define HEARTBEAT_LED hal::Pin(hal::Port::C, 2u)
 
+//! @brief Motor Driver 1 interface
+#define D1_PWMA hal::PwmPin(hal::Pin(hal::Port::A, 2u), GPIO_AF3_TIM9, 1u)
+#define D1_PWMB hal::PwmPin(hal::Pin(hal::Port::A, 3u), GPIO_AF3_TIM9, 2u)
+
+#define D1_AIN1 hal::Pin(hal::Port::C, 3u)
+#define D1_AIN2 hal::Pin(hal::Port::A, 4u)
+
+#define D1_BIN1 hal::Pin(hal::Port::C, 4u)
+#define D1_BIN2 hal::Pin(hal::Port::C, 5u)
+
+#define D1_STBY hal::Pin(hal::Port::B, 0u)
+
+//! @brief Motor Driver 2 interface
+#define D2_PWMA hal::PwmPin(hal::Pin(hal::Port::B, 14u), GPIO_AF9_TIM12, 1u)
+#define D2_PWMB hal::PwmPin(hal::Pin(hal::Port::B, 15u), GPIO_AF9_TIM12, 2u)
+
+#define D2_AIN1 hal::Pin(hal::Port::B, 1u)
+#define D2_AIN2 hal::Pin(hal::Port::B, 2u)
+
+#define D2_BIN1 hal::Pin(hal::Port::C, 9u)
+#define D2_BIN2 hal::Pin(hal::Port::C, 8u)
+
+#define D2_STBY hal::Pin(hal::Port::A, 10u)
+
 #define IMU_INT_PIN GPIO_PIN_13
 #define IMU_INT_GPIO_PORT GPIOC
 
@@ -15,23 +39,11 @@
 #define HSE_OUT_PIN GPIO_PIN_1
 #define HSE_OUT_GPIO_PORT GPIOH
 
-#define D1_AIN1_PIN GPIO_PIN_3
-#define D1_AIN1_GPIO_PORT GPIOC
-
 #define D1_MOTORA_CHA_PIN GPIO_PIN_0
 #define D1_MOTORA_CHA_GPIO_PORT GPIOA
 
 #define D1_MOTORA_CHB_PIN GPIO_PIN_1
 #define D1_MOTORA_CHB_GPIO_PORT GPIOA
-
-#define D1_PWMA_PIN GPIO_PIN_2
-#define D1_PWMA_GPIO_PORT GPIOA
-
-#define D1_PWMB_PIN GPIO_PIN_3
-#define D1_PWMB_GPIO_PORT GPIOA
-
-#define D1_AIN2_PIN GPIO_PIN_4
-#define D1_AIN2_GPIO_PORT GPIOA
 
 #define VBATT_AIN_PIN GPIO_PIN_5
 #define VBATT_AIN_GPIO_PORT GPIOA
@@ -42,41 +54,14 @@
 #define D1_MOTORB_CHB_PIN GPIO_PIN_7
 #define D1_MOTORB_CHB_GPIO_PORT GPIOA
 
-#define D1_BIN1_PIN GPIO_PIN_4
-#define D1_BIN1_GPIO_PORT GPIOC
-
-#define D1_BIN2_PIN GPIO_PIN_5
-#define D1_BIN2_GPIO_PORT GPIOC
-
-#define D1_STBY_PIN GPIO_PIN_0
-#define D1_STBY_GPIO_PORT GPIOB
-
-#define D2_AIN1_PIN GPIO_PIN_1
-#define D2_AIN1_GPIO_PORT GPIOB
-
-#define D2_AIN2_PIN GPIO_PIN_2
-#define D2_AIN2_GPIO_PORT GPIOB
-
 #define CAN2_RS_PIN GPIO_PIN_10
 #define CAN2_RS_GPIO_PORT GPIOB
-
-#define D2_PWMA_PIN GPIO_PIN_14
-#define D2_PWMA_GPIO_PORT GPIOB
-
-#define D2_PWMB_PIN GPIO_PIN_15
-#define D2_PWMB_GPIO_PORT GPIOB
 
 #define D2_MOTORA_CHA_PIN GPIO_PIN_6
 #define D2_MOTORA_CHA_GPIO_PORT GPIOC
 
 #define D2_MOTORA_CHB_PIN GPIO_PIN_7
 #define D2_MOTORA_CHB_GPIO_PORT GPIOC
-
-#define D2_BIN2_PIN GPIO_PIN_8
-#define D2_BIN2_GPIO_PORT GPIOC
-
-#define D2_BIN1_PIN GPIO_PIN_9
-#define D2_BIN1_GPIO_PORT GPIOC
 
 #define D2_MOTORB_CHA_PIN GPIO_PIN_8
 #define D2_MOTORB_CHA_GPIO_PORT GPIOA
