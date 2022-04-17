@@ -2,10 +2,6 @@
 
 int main(void)
 {
-  initBoard();
-
-  serialTxString("\"initBoard\" complete.\r\n");
-
   while (1)
   {
     toggleHeartbeat();
