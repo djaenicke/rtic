@@ -1,0 +1,39 @@
+#include "digital_out.h"
+
+namespace hal
+{
+DigitalOut::DigitalOut(const Pin& pin) : GPIO(pin, GpioMode::OUTPUT_PUSH_PULL)
+{
+}
+
+DigitalOut& DigitalOut::operator=(const uint8_t state)
+{
+  if (0u == state)
+  {
+    HAL_GPIO_WritePin(_port_ptr, _pin_select, GPIO_PIN_RESET);
+  }
+  else if (1u == state)
+  {
+    HAL_GPIO_WritePin(_port_ptr, _pin_select, GPIO_PIN_SET);
+  }
+  else
+  {
+    // todo: assert
+  }
+
+  return *this;
+}
+
+void DigitalOut::toggle(void)
+{
+  if (NULL != _port_ptr)
+  {
+    HAL_GPIO_TogglePin(_port_ptr, _pin_select);
+  }
+  else
+  {
+    // todo: assert
+  }
+}
+
+}  // namespace hal
