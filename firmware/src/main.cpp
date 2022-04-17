@@ -1,6 +1,6 @@
 #include "board.h"
 
-void main(void)
+int main(void)
 {
   initBoard();
 
@@ -11,4 +11,6 @@ void main(void)
     toggleHeartbeat();
     delayMs(500u);
   }
+
+  return 0;
 }
