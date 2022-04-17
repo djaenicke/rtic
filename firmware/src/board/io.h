@@ -1,7 +1,10 @@
 #ifndef IO_H
 #define IO_H (1)
 
+#include "gpio.h"
 #include "stm32f4xx_hal.h"
+
+#define HEARTBEAT_LED hal::Pin(hal::Port::C, 2u)
 
 #define IMU_INT_PIN GPIO_PIN_13
 #define IMU_INT_GPIO_PORT GPIOC
@@ -11,9 +14,6 @@
 
 #define HSE_OUT_PIN GPIO_PIN_1
 #define HSE_OUT_GPIO_PORT GPIOH
-
-#define HEARTBEAT_LED_PIN GPIO_PIN_2
-#define HEARTBEAT_LED_GPIO_PORT GPIOC
 
 #define D1_AIN1_PIN GPIO_PIN_3
 #define D1_AIN1_GPIO_PORT GPIOC
