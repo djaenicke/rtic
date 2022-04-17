@@ -63,8 +63,7 @@ static void configSystemClock(void)
 
   /** Initializes the CPU, AHB and APB buses clocks
    */
-  rcc_clk_init.ClockType =
-      RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+  rcc_clk_init.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   rcc_clk_init.SYSCLKSource = RCC_SYSCLKSOURCE_HSE;
   rcc_clk_init.AHBCLKDivider = RCC_SYSCLK_DIV1;
   rcc_clk_init.APB1CLKDivider = RCC_HCLK_DIV1;

@@ -46,6 +46,7 @@ set(APP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/digital_out.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/gpio.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/hw_timer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/pwm.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
 )
 
