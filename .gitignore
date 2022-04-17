@@ -29,6 +29,6 @@ build_log.txt
 .vscode/*cortex-debug*
 .vscode/settings.json
 .vscode/*_properties.json
-.vscode/launch.json
+firmware/.vscode/launch.json
 
 *.jlink
