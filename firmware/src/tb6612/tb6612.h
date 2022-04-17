@@ -30,9 +30,9 @@ typedef enum
 class TB6612
 {
  public:
-  TB6612(const hal::PwmPin& pwm_a, const hal::PwmPin& pwm_b, const hal::Pin& ain1, const hal::Pin& ain2,
-         const hal::Pin& bin1, const hal::Pin& bin2, const hal::Pin& stby, const MotorPolarity a_polarity = STANDARD,
-         const MotorPolarity b_polarity = STANDARD);
+  TB6612(const hal::PwmPin& pwm_a, const hal::PwmPin& pwm_b, const hal::Pin& ain1,
+         const hal::Pin& ain2, const hal::Pin& bin1, const hal::Pin& bin2, const hal::Pin& stby,
+         const MotorPolarity a_polarity = STANDARD, const MotorPolarity b_polarity = STANDARD);
 
   void setDirection(const MotorId motor, const Direction new_dir);
   Direction getDirection(const MotorId motor);

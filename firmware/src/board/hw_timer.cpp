@@ -4,8 +4,9 @@
 
 namespace hal
 {
-HwTimer::HwTimer(const uint8_t timer_instance, const TimerMode mode, const float period_s, const bool ch_1_enabled,
-                 const bool ch_2_enabled, const bool ch_3_enabled, const bool ch_4_enabled)
+HwTimer::HwTimer(const uint8_t timer_instance, const TimerMode mode, const float period_s,
+                 const bool ch_1_enabled, const bool ch_2_enabled, const bool ch_3_enabled,
+                 const bool ch_4_enabled)
 {
   switch (timer_instance)
   {

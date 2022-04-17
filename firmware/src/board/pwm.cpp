@@ -5,7 +5,8 @@
 namespace hal
 {
 PwmOut::PwmOut(const hal::PwmPin& pwm_pin)
-    : _output(pwm_pin.pin, hal::GpioMode::AF_PUSH_PULL, hal::GpioPullType::NO_PULL, pwm_pin.gpio_alt_function)
+    : _output(pwm_pin.pin, hal::GpioMode::AF_PUSH_PULL, hal::GpioPullType::NO_PULL,
+              pwm_pin.gpio_alt_function)
 {
   switch (pwm_pin.timer_channel)
   {

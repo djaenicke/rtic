@@ -2,9 +2,9 @@
 
 namespace tb6612
 {
-TB6612::TB6612(const hal::PwmPin& pwm_a, const hal::PwmPin& pwm_b, const hal::Pin& ain1, const hal::Pin& ain2,
-               const hal::Pin& bin1, const hal::Pin& bin2, const hal::Pin& stby, const MotorPolarity a_polarity,
-               const MotorPolarity b_polarity)
+TB6612::TB6612(const hal::PwmPin& pwm_a, const hal::PwmPin& pwm_b, const hal::Pin& ain1,
+               const hal::Pin& ain2, const hal::Pin& bin1, const hal::Pin& bin2,
+               const hal::Pin& stby, const MotorPolarity a_polarity, const MotorPolarity b_polarity)
     : pwm_a(pwm_a),
       pwm_b(pwm_b),
       _a_in1(ain1),
