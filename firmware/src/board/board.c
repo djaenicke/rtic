@@ -3,10 +3,15 @@
 #include <stdint.h>
 #include <string.h>
 
+#define DEBUG_TX_PIN GPIO_PIN_6
+#define DEBUG_TX_GPIO_PORT GPIOB
+
+#define DEBUG_RX_PIN GPIO_PIN_7
+#define DEBUG_RX_GPIO_PORT GPIOB
+
 UART_HandleTypeDef debug_uart;
 
 static void configSystemClock(void);
-static void gpioInit(void);
 static void serialInit(void);
 static void errorHandler(void);
 
@@ -16,15 +21,7 @@ void initBoard(void)
   HAL_Init();
 
   configSystemClock();
-
-  gpioInit();
   serialInit();
-}
-
-void toggleHeartbeat(void)
-{
-  HAL_GPIO_TogglePin(HEARTBEAT_LED_GPIO_PORT, HEARTBEAT_LED_PIN);
-  HAL_Delay(500);
 }
 
 void delayMs(const uint32_t delay_ms)
@@ -77,73 +74,6 @@ static void configSystemClock(void)
   {
     errorHandler();
   }
-}
-
-static void gpioInit(void)
-{
-  GPIO_InitTypeDef gpio_init = { 0 };
-
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOH_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOD_CLK_ENABLE();
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, HEARTBEAT_LED_PIN | D1_AIN1_PIN | D1_BIN1_PIN | D1_BIN2_PIN | D2_BIN2_PIN | D2_BIN1_PIN,
-                    GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, D1_AIN2_PIN | D2_STBY_PIN, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, D1_STBY_PIN | D2_AIN1_PIN | D2_AIN2_PIN | CAN2_RS_PIN | RF_EN_PIN, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(RF_CS_GPIO_PORT, RF_CS_PIN, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : IMU_INT_PIN */
-  gpio_init.Pin = IMU_INT_PIN;
-  gpio_init.Mode = GPIO_MODE_INPUT;
-  gpio_init.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(IMU_INT_GPIO_PORT, &gpio_init);
-
-  /*Configure GPIO pins : HEARTBEAT_LED_PIN D1_AIN1_PIN D1_BIN1_PIN D1_BIN2_PIN
-                           D2_BIN2_PIN D2_BIN1_PIN */
-  gpio_init.Pin = HEARTBEAT_LED_PIN | D1_AIN1_PIN | D1_BIN1_PIN | D1_BIN2_PIN | D2_BIN2_PIN | D2_BIN1_PIN;
-  gpio_init.Mode = GPIO_MODE_OUTPUT_PP;
-  gpio_init.Pull = GPIO_NOPULL;
-  gpio_init.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &gpio_init);
-
-  /*Configure GPIO pins : D1_AIN2_PIN D2_STBY_PIN */
-  gpio_init.Pin = D1_AIN2_PIN | D2_STBY_PIN;
-  gpio_init.Mode = GPIO_MODE_OUTPUT_PP;
-  gpio_init.Pull = GPIO_NOPULL;
-  gpio_init.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &gpio_init);
-
-  /*Configure GPIO pins : D1_STBY_PIN D2_AIN1_PIN D2_AIN2_PIN CAN2_RS_PIN
-                           RF_EN_PIN */
-  gpio_init.Pin = D1_STBY_PIN | D2_AIN1_PIN | D2_AIN2_PIN | CAN2_RS_PIN | RF_EN_PIN;
-  gpio_init.Mode = GPIO_MODE_OUTPUT_PP;
-  gpio_init.Pull = GPIO_NOPULL;
-  gpio_init.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &gpio_init);
-
-  /*Configure GPIO pin : RF_CS_PIN */
-  gpio_init.Pin = RF_CS_PIN;
-  gpio_init.Mode = GPIO_MODE_OUTPUT_PP;
-  gpio_init.Pull = GPIO_NOPULL;
-  gpio_init.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(RF_CS_GPIO_PORT, &gpio_init);
-
-  /*Configure GPIO pin : RF_IRQ_PIN */
-  gpio_init.Pin = RF_IRQ_PIN;
-  gpio_init.Mode = GPIO_MODE_INPUT;
-  gpio_init.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(RF_IRQ_GPIO_PORT, &gpio_init);
 }
 
 static void serialInit(void)

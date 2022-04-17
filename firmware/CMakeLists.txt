@@ -42,6 +42,8 @@ set(RELEASE_BUILD_DEFINITIONS -DRELEASE_BUILD -DUSE_HAL_DRIVER -DSTM32F412Rx)
 # Create a list of our APP source
 set(APP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/board.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/digital_in.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/digital_out.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/gpio.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
 )
