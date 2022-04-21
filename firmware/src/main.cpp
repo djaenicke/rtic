@@ -14,38 +14,48 @@ char buffer[PRINT_BUF_LEN];
 
 hal::DigitalOut heartbeat(HEARTBEAT_LED);
 
-hal::HwTimer timer_d1_pwm(9, hal::TimerMode::PWM_GENERATION, 0.0001f, true, true);
-hal::HwTimer timer_d2_pwm(12, hal::TimerMode::PWM_GENERATION, 0.0001f, true, true);
-tb6612::TB6612 driver_1(D1_PWMA, D1_PWMB, D1_AIN1, D1_AIN2, D1_BIN1, D1_BIN2, D1_STBY);
-tb6612::TB6612 driver_2(D2_PWMA, D2_PWMB, D2_AIN1, D2_AIN2, D2_BIN1, D2_BIN2, D2_STBY);
+hal::HwTimer timer_d1_pwm(9u, hal::TimerMode::PWM_GENERATION, 0.0001f, true, true);
+hal::HwTimer timer_d2_pwm(12u, hal::TimerMode::PWM_GENERATION, 0.0001f, true, true);
+
+tb6612::MotorDriver fr_driver(D1_PWMA, D1_AIN1, D1_AIN2);
+tb6612::MotorDriver fl_driver(D1_PWMB, D1_BIN1, D1_BIN2);
+hal::DigitalOut f_driver_standby(D1_STBY);
+
+tb6612::MotorDriver rr_driver(D2_PWMA, D2_AIN1, D2_AIN2);
+tb6612::MotorDriver rl_driver(D2_PWMB, D2_BIN1, D2_BIN2);
+hal::DigitalOut r_driver_standby(D2_STBY);
 
 hal::QuadratureEncoder fr_encoder(5u, D1_MOTORA_CHA, D1_MOTORA_CHB);
 hal::QuadratureEncoder fl_encoder(3u, D1_MOTORB_CHA, D1_MOTORB_CHB, hal::EncoderPolarity::REVERSED);
+
 hal::QuadratureEncoder rr_encoder(D2_MOTORA_CHA, D2_MOTORA_CHB);
 hal::QuadratureEncoder rl_encoder(D2_MOTORB_CHA, D2_MOTORB_CHB, hal::EncoderPolarity::REVERSED);
 
 int main(void)
 {
-  driver_1.pwm_a.start(&timer_d1_pwm);
-  driver_1.pwm_b.start(&timer_d1_pwm);
+  fr_driver.pwm.start(&timer_d1_pwm);
+  fl_driver.pwm.start(&timer_d1_pwm);
 
-  driver_2.pwm_a.start(&timer_d2_pwm);
-  driver_2.pwm_b.start(&timer_d2_pwm);
+  rr_driver.pwm.start(&timer_d2_pwm);
+  rl_driver.pwm.start(&timer_d2_pwm);
+
+  f_driver_standby = 1u;
+  r_driver_standby = 1u;
 
   fr_encoder.start();
   fl_encoder.start();
   rr_encoder.start();
   rl_encoder.start();
 
-  driver_1.setDirection(tb6612::MOTOR_A, tb6612::FORWARD);
-  driver_1.setDirection(tb6612::MOTOR_B, tb6612::FORWARD);
-  driver_1.setDutyCycle(tb6612::MOTOR_A, 25u);
-  driver_1.setDutyCycle(tb6612::MOTOR_B, 25u);
+  fr_driver.setDirection(tb6612::Direction::FORWARD);
+  fl_driver.setDirection(tb6612::Direction::FORWARD);
+  fr_driver.setDutyCycle(25u);
+  fl_driver.setDutyCycle(25u);
 
-  driver_2.setDirection(tb6612::MOTOR_A, tb6612::FORWARD);
-  driver_2.setDirection(tb6612::MOTOR_B, tb6612::FORWARD);
-  driver_2.setDutyCycle(tb6612::MOTOR_A, 25u);
-  driver_2.setDutyCycle(tb6612::MOTOR_B, 25u);
+  rr_driver.setDirection(tb6612::Direction::FORWARD);
+  rl_driver.setDirection(tb6612::Direction::FORWARD);
+  rr_driver.setDutyCycle(25u);
+  rl_driver.setDutyCycle(25u);
 
   while (1)
   {
