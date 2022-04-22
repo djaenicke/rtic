@@ -1,6 +1,11 @@
 #include "serial_logger.h"
 
-void taskSerialLogger(void)
-{
+#include "cmsis_os.h"
 
+void threadSerialLogger(const void* argument)
+{
+  for (;;)
+  {
+    osDelay(10u);
+  }
 }

@@ -84,7 +84,8 @@ set(INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Device/ST/STM32F4xx/Include
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Include     
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Include
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/include
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F      
 )
