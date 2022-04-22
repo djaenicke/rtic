@@ -1,37 +1,14 @@
 #include "board.h"
 
 #include <stdint.h>
-#include <string.h>
-
-#define DEBUG_TX_PIN GPIO_PIN_6
-#define DEBUG_TX_GPIO_PORT GPIOB
-
-#define DEBUG_RX_PIN GPIO_PIN_7
-#define DEBUG_RX_GPIO_PORT GPIOB
-
-UART_HandleTypeDef debug_uart;
 
 static void configSystemClock(void);
-static void serialInit(void);
 static void errorHandler(void);
 
 void initBoard(void)
 {
-  // Reset of all peripherals, Initializes the Flash interface and the Systick.
   HAL_Init();
-
   configSystemClock();
-  serialInit();
-}
-
-void delayMs(const uint32_t delay_ms)
-{
-  HAL_Delay(delay_ms);
-}
-
-void serialTxString(const char* const string)
-{
-  HAL_UART_Transmit(&debug_uart, (uint8_t*)string, (uint16_t)strlen(string), HAL_MAX_DELAY);
 }
 
 static void configSystemClock(void)
@@ -70,35 +47,6 @@ static void configSystemClock(void)
   rcc_clk_init.APB1CLKDivider = RCC_HCLK_DIV1;
   rcc_clk_init.APB2CLKDivider = RCC_HCLK_DIV1;
   if (HAL_RCC_ClockConfig(&rcc_clk_init, FLASH_LATENCY_0) != HAL_OK)
-  {
-    errorHandler();
-  }
-}
-
-static void serialInit(void)
-{
-  GPIO_InitTypeDef gpio_init = { 0 };
-
-  __HAL_RCC_USART1_CLK_ENABLE();
-
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-
-  gpio_init.Pin = DEBUG_TX_PIN | DEBUG_RX_PIN;
-  gpio_init.Mode = GPIO_MODE_AF_PP;
-  gpio_init.Pull = GPIO_NOPULL;
-  gpio_init.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  gpio_init.Alternate = GPIO_AF7_USART1;
-  HAL_GPIO_Init(GPIOB, &gpio_init);
-
-  debug_uart.Instance = USART1;
-  debug_uart.Init.BaudRate = 115200;
-  debug_uart.Init.WordLength = UART_WORDLENGTH_8B;
-  debug_uart.Init.StopBits = UART_STOPBITS_1;
-  debug_uart.Init.Parity = UART_PARITY_NONE;
-  debug_uart.Init.Mode = UART_MODE_TX;
-  debug_uart.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  debug_uart.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&debug_uart) != HAL_OK)
   {
     errorHandler();
   }

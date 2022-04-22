@@ -6,29 +6,52 @@
 #include "io.h"
 #include "motor_controls.h"
 #include "serial_logger.h"
+#include "threads.h"
 
 static void threadHeartbeat(const void* argument);
 
+// clang-format off
 static osThreadId heartbeat_thread_handle;
 static char heartbeat_thread_name[] = "HeartbeatThread";
-const osThreadDef_t heartbeat_thread_def = {
-  heartbeat_thread_name, threadHeartbeat, osPriorityLow, 0u, 64u, NULL, NULL
+const osThreadDef_t heartbeat_thread_def = { 
+  heartbeat_thread_name,
+  threadHeartbeat,
+  HEARTBEAT_PRIORITY,
+  0u,
+  HEARTBEAT_STACK_SIZE_WORDS,
+  NULL,
+  NULL
 };
 
 static osThreadId motor_controls_thread_handle;
 static char motor_controls_thread_name[] = "MotorControlsThread";
-const osThreadDef_t motor_controls_thread_def = {
-  motor_controls_thread_name, threadMotorControls, osPriorityRealtime, 0u, 64u, NULL, NULL
+const osThreadDef_t motor_controls_thread_def = { 
+  motor_controls_thread_name,
+  threadMotorControls,
+  MOTOR_CONTROLS_PRIORITY,
+  0u,
+  MOTOR_CONTROLS_STACK_SIZE_WORDS,
+  NULL,
+  NULL
 };
 
 static osThreadId serial_logger_thread_handle;
 static char serial_logger_thread_name[] = "SerialLoggerThread";
-const osThreadDef_t serial_logger_thread_def = {
-  serial_logger_thread_name, threadSerialLogger, osPriorityNormal, 0u, 128u, NULL, NULL
+const osThreadDef_t serial_logger_thread_def = { 
+  serial_logger_thread_name,
+  threadSerialLogger,
+  SERIAL_LOGGER_PRIORITY,
+  0u,
+  SERIAL_LOGGER_STACK_SIZE_WORDS,
+  NULL,
+  NULL
 };
+// clang-format on
 
 int main(void)
 {
+  initSerialLogger(LOG_DEBUG);
+
   // Create the threads
   heartbeat_thread_handle = osThreadCreate(&heartbeat_thread_def, NULL);
   motor_controls_thread_handle = osThreadCreate(&motor_controls_thread_def, NULL);
@@ -43,10 +66,14 @@ int main(void)
 static void threadHeartbeat(const void* argument)
 {
   static hal::DigitalOut heartbeat(HEARTBEAT_LED);
+  static TickType_t last_wake_time = xTaskGetTickCount();
+  const TickType_t cycle_time_ticks = HEARTBEAT_PERIOD_MS * portTICK_PERIOD_MS;
+
+  logMessage(LOG_DEBUG, "HeartbeatThread started.\r\n");
 
   for (;;)
   {
+    vTaskDelayUntil(&last_wake_time, cycle_time_ticks);
     heartbeat.toggle();
-    osDelay(500u);
   }
 }

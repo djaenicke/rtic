@@ -6,7 +6,9 @@
 #include "io.h"
 #include "pwm.h"
 #include "quadrature_encoder.h"
+#include "serial_logger.h"
 #include "tb6612.h"
+#include "threads.h"
 
 static hal::HwTimer timer_d1_pwm(9u, hal::TimerMode::PWM_GENERATION, 0.0001f, true, true);
 static hal::HwTimer timer_d2_pwm(12u, hal::TimerMode::PWM_GENERATION, 0.0001f, true, true);
@@ -29,6 +31,9 @@ static hal::QuadratureEncoder rl_encoder(D2_MOTORB_CHA, D2_MOTORB_CHB,
 
 void threadMotorControls(const void* argument)
 {
+  static TickType_t last_wake_time = xTaskGetTickCount();
+  const TickType_t cycle_time_ticks = MOTOR_CONTROLS_PERIOD_MS * portTICK_PERIOD_MS;
+
   fr_driver.pwm.start(&timer_d1_pwm);
   fl_driver.pwm.start(&timer_d1_pwm);
 
@@ -53,8 +58,11 @@ void threadMotorControls(const void* argument)
   rr_driver.setDutyCycle(25u);
   rl_driver.setDutyCycle(25u);
 
+  logMessage(LOG_DEBUG, "MotorControlsThread started.\r\n");
+
   for (;;)
   {
-    osDelay(25u);
+    vTaskDelayUntil(&last_wake_time, cycle_time_ticks);
+    logMessage(LOG_MC, "FR = %ld\r\n", fr_encoder.getPulses());
   }
 }

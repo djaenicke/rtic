@@ -48,6 +48,7 @@ set(APP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/hw_timer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/pwm.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/quadrature_encoder.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/uart.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controls.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/serial_logger.cpp
