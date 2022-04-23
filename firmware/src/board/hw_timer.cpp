@@ -11,56 +11,63 @@ HwTimer::HwTimer(const uint8_t timer_instance, const TimerMode mode, const float
   switch (timer_instance)
   {
     case 1:
-      _timer_ptr = TIM1;
+      __HAL_RCC_TIM1_CLK_ENABLE();
+      _timer_handle.Instance = TIM1;
       break;
     case 2:
-      _timer_ptr = TIM2;
+      __HAL_RCC_TIM2_CLK_ENABLE();
+      _timer_handle.Instance = TIM2;
       break;
     case 3:
-      _timer_ptr = TIM3;
+      __HAL_RCC_TIM3_CLK_ENABLE();
+      _timer_handle.Instance = TIM3;
       break;
     case 4:
-      _timer_ptr = TIM4;
+      __HAL_RCC_TIM4_CLK_ENABLE();
+      _timer_handle.Instance = TIM4;
       break;
     case 5:
-      _timer_ptr = TIM5;
+      __HAL_RCC_TIM5_CLK_ENABLE();
+      _timer_handle.Instance = TIM5;
       break;
     case 6:
-      _timer_ptr = TIM6;
+      __HAL_RCC_TIM6_CLK_ENABLE();
+      _timer_handle.Instance = TIM6;
       break;
     case 7:
-      _timer_ptr = TIM7;
+      __HAL_RCC_TIM7_CLK_ENABLE();
+      _timer_handle.Instance = TIM7;
       break;
     case 9:
-      _timer_ptr = TIM9;
+      __HAL_RCC_TIM9_CLK_ENABLE();
+      _timer_handle.Instance = TIM9;
       break;
     case 10:
-      _timer_ptr = TIM10;
+      __HAL_RCC_TIM10_CLK_ENABLE();
+      _timer_handle.Instance = TIM10;
       break;
     case 11:
-      _timer_ptr = TIM11;
+      __HAL_RCC_TIM11_CLK_ENABLE();
+      _timer_handle.Instance = TIM11;
       break;
     case 12:
-      _timer_ptr = TIM12;
+      __HAL_RCC_TIM12_CLK_ENABLE();
+      _timer_handle.Instance = TIM12;
       break;
     case 13:
-      _timer_ptr = TIM13;
+      __HAL_RCC_TIM13_CLK_ENABLE();
+      _timer_handle.Instance = TIM13;
       break;
     case 14:
-      _timer_ptr = TIM14;
+      __HAL_RCC_TIM14_CLK_ENABLE();
+      _timer_handle.Instance = TIM14;
       break;
     default:
-      _timer_ptr = NULL;
       // todo: assert
+      _timer_handle.Instance = NULL;
       return;
   }
 
-  if (NULL == _timer_ptr)
-  {
-    return;
-  }
-
-  _timer_handle.Instance = _timer_ptr;
   _timer_handle.Init.Prescaler = 0;
   _timer_handle.Init.CounterMode = TIM_COUNTERMODE_UP;
   _timer_handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -73,17 +80,11 @@ HwTimer::HwTimer(const uint8_t timer_instance, const TimerMode mode, const float
   switch (mode)
   {
     case TimerMode::TIME_BASE:
-    {
       break;
-    }
     case TimerMode::INPUT_CAPTURE:
-    {
       break;
-    }
     case TimerMode::OUTPUT_COMPARE:
-    {
       break;
-    }
     case TimerMode::PWM_GENERATION:
     {
       uint16_t period_ticks = (uint16_t)roundf(period_s * getSourceFreqHz());
@@ -92,29 +93,22 @@ HwTimer::HwTimer(const uint8_t timer_instance, const TimerMode mode, const float
       break;
     }
     case TimerMode::ONE_PULSE_MODE_OUTPUT:
-    {
       break;
-    }
     case TimerMode::ENCODER_CH1_2X_MODE:
-    {
       _timer_handle.Init.Period = 65535u;
       initEncoderMode(TIM_ENCODERMODE_TI1);
       break;
-    }
     case TimerMode::ENCODER_CH2_2X_MODE:
-    {
       _timer_handle.Init.Period = 65535u;
       initEncoderMode(TIM_ENCODERMODE_TI2);
       break;
-    }
     case TimerMode::ENCODER_4X_MODE:
-    {
       _timer_handle.Init.Period = 65535u;
       initEncoderMode(TIM_ENCODERMODE_TI12);
       break;
-    }
     default:
-      break;
+      // todo: assert
+      return;
   }
 }
 
@@ -145,15 +139,6 @@ uint32_t HwTimer::getSourceFreqHz(void)
 void HwTimer::initPwmMode(const bool ch_1_enabled, const bool ch_2_enabled, const bool ch_3_enabled,
                           const bool ch_4_enabled)
 {
-  if (TIM9 == _timer_handle.Instance)
-  {
-    __HAL_RCC_TIM9_CLK_ENABLE();
-  }
-  else if (TIM12 == _timer_handle.Instance)
-  {
-    __HAL_RCC_TIM12_CLK_ENABLE();
-  }
-
   HAL_TIM_PWM_Init(&_timer_handle);
 
   TIM_OC_InitTypeDef oc_cfg = { 0 };
@@ -184,23 +169,6 @@ void HwTimer::initPwmMode(const bool ch_1_enabled, const bool ch_2_enabled, cons
 
 void HwTimer::initEncoderMode(const uint32_t encoder_mode)
 {
-  if (TIM1 == _timer_handle.Instance)
-  {
-    __HAL_RCC_TIM1_CLK_ENABLE();
-  }
-  else if (TIM3 == _timer_handle.Instance)
-  {
-    __HAL_RCC_TIM3_CLK_ENABLE();
-  }
-  else if (TIM5 == _timer_handle.Instance)
-  {
-    __HAL_RCC_TIM5_CLK_ENABLE();
-  }
-  else if (TIM8 == _timer_handle.Instance)
-  {
-    __HAL_RCC_TIM8_CLK_ENABLE();
-  }
-
   TIM_Encoder_InitTypeDef encoder_cfg = { 0 };
 
   encoder_cfg.EncoderMode = encoder_mode;

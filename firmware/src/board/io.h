@@ -46,6 +46,14 @@
 
 #define D2_STBY hal::Pin(hal::Port::A, 10u)
 
+// clang-format off
+//! @brief Debug UART
+#define DEBUG_TX hal::GPIO(hal::Pin(hal::Port::B, 6U), hal::GpioMode::AF_PUSH_PULL, \
+                 hal::GpioPullType::NO_PULL, GPIO_AF7_USART1, hal::GpioSpeed::VERY_HIGH)
+#define DEBUG_RX hal::GPIO(hal::Pin(hal::Port::B, 7U), hal::GpioMode::AF_PUSH_PULL, \
+                 hal::GpioPullType::NO_PULL, GPIO_AF7_USART1, hal::GpioSpeed::VERY_HIGH)
+// clang-format on
+
 #define IMU_INT_PIN GPIO_PIN_13
 #define IMU_INT_GPIO_PORT GPIOC
 

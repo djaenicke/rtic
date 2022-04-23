@@ -31,7 +31,7 @@ set(LINKER_STATIC_LIBRARIES
 )
 
 # Specify the location of our Linker file
-set(CPU_LINKER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/src/board/STM32F412RETX_FLASH.ld)
+set(CPU_LINKER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/STM32F412RETX_FLASH.ld)
 
 # Set debug build specific definitions
 set(DEBUG_BUILD_DEFINITIONS -DDEBUG_BUILD -DUSE_HAL_DRIVER -DSTM32F412Rx -DHSE_VALUE=16000000)
@@ -48,15 +48,27 @@ set(APP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/hw_timer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/pwm.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/quadrature_encoder.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/uart.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controls.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/serial_logger.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612/tb6612.cpp
 )
 
 # Glob together a list of our SDK source
 FILE(GLOB SDK_SRC
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/freertos.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/stm32f4xx_hal_timebase_tim.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/stm32f4xx_it.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/syscalls.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/sysmem.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/system_stm32f4xx.c
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Startup/*.s
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Src/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/*.c
 )
 
 # Set all of our application include paths
@@ -73,7 +85,10 @@ set(INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Device/ST/STM32F4xx/Include
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Include           
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Include
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F      
 )
 
 # Add any subdirectories with CMake projects that should be added
