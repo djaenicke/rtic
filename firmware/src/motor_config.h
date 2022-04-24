@@ -21,4 +21,4 @@
 //!@brief Rear left motor speed constant
 #define RL_KV 2.70f
 
-#endif // MOTOR_CONFIG_H
+#endif  // MOTOR_CONFIG_H
