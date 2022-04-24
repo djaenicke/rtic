@@ -54,7 +54,7 @@ set(APP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controls.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/serial_logger.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612/tb6612.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/voltage_monitor.cpp
 )
 
@@ -78,7 +78,6 @@ FILE(GLOB SDK_SRC
 set(APP_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612
 )
 
 # Set all of our application and SDK include paths
