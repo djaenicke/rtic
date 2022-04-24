@@ -1,68 +1,99 @@
 #include "motor_controls.h"
 
+#include "analog_in.h"
 #include "cmsis_os.h"
 #include "digital_out.h"
 #include "hw_timer.h"
 #include "io.h"
+#include "low_pass_filter.h"
+#include "motor_config.h"
+#include "motor_controller.h"
 #include "pwm.h"
 #include "quadrature_encoder.h"
 #include "serial_logger.h"
 #include "tb6612.h"
 #include "threads.h"
+#include "voltage_monitor.h"
 
-static hal::HwTimer timer_d1_pwm(9u, hal::TimerMode::PWM_GENERATION, 0.0001f, true, true);
-static hal::HwTimer timer_d2_pwm(12u, hal::TimerMode::PWM_GENERATION, 0.0001f, true, true);
+static vm::VoltageMonitor vbatt_monitor(VBATT_ADC, VBATT_SCALE_FACTOR);
 
-static tb6612::MotorDriver fr_driver(D1_PWMA, D1_AIN1, D1_AIN2);
-static tb6612::MotorDriver fl_driver(D1_PWMB, D1_BIN1, D1_BIN2);
+static hal::HwTimer f_pwm_timer(9u, hal::TimerMode::PWM_GENERATION, 0.0001f, true, true);
 static hal::DigitalOut f_driver_standby(D1_STBY);
 
-static tb6612::MotorDriver rr_driver(D2_PWMA, D2_AIN1, D2_AIN2);
-static tb6612::MotorDriver rl_driver(D2_PWMB, D2_BIN1, D2_BIN2);
+static hal::HwTimer r_pwm_timer(12u, hal::TimerMode::PWM_GENERATION, 0.0001f, true, true);
 static hal::DigitalOut r_driver_standby(D2_STBY);
 
-static hal::QuadratureEncoder fr_encoder(5u, D1_MOTORA_CHA, D1_MOTORA_CHB);
-static hal::QuadratureEncoder fl_encoder(3u, D1_MOTORB_CHA, D1_MOTORB_CHB,
+static mc::MotorController fr_controller(tb6612::MotorDriver(D1_PWMA, D1_AIN1, D1_AIN2),
+                                         hal::QuadratureEncoder(5u, D1_MOTORA_CHA, D1_MOTORA_CHB));
+
+static mc::MotorController fl_controller(tb6612::MotorDriver(D1_PWMB, D1_BIN1, D1_BIN2),
+                                         hal::QuadratureEncoder(3u, D1_MOTORB_CHA, D1_MOTORB_CHB,
+                                                                hal::EncoderPolarity::REVERSED));
+
+static mc::MotorController rr_controller(tb6612::MotorDriver(D2_PWMA, D2_AIN1, D2_AIN2),
+                                         D2_MOTORA_CHA, D2_MOTORA_CHB);
+
+static mc::MotorController rl_controller(tb6612::MotorDriver(D2_PWMB, D2_BIN1, D2_BIN2),
+                                         D2_MOTORB_CHA, D2_MOTORB_CHB,
                                          hal::EncoderPolarity::REVERSED);
 
-static hal::QuadratureEncoder rr_encoder(D2_MOTORA_CHA, D2_MOTORA_CHB);
-static hal::QuadratureEncoder rl_encoder(D2_MOTORB_CHA, D2_MOTORB_CHB,
-                                         hal::EncoderPolarity::REVERSED);
+static const float VBATT_FILT_ALPHA = 0.4f;
+static const float MAX_MOTOR_VOLTAGE = 12.0f;
+
+static void initMotorControllers(void);
 
 void threadMotorControls(const void* argument)
 {
   static TickType_t last_wake_time = xTaskGetTickCount();
   const TickType_t cycle_time_ticks = MOTOR_CONTROLS_PERIOD_MS * portTICK_PERIOD_MS;
+  const float period_s = MOTOR_CONTROLS_PERIOD_MS / 1000.0f;
+  static float meas_vbatt = 0.0f;
+  static float max_vbatt = 0.0f;
 
-  fr_driver.pwm.start(&timer_d1_pwm);
-  fl_driver.pwm.start(&timer_d1_pwm);
-
-  rr_driver.pwm.start(&timer_d2_pwm);
-  rl_driver.pwm.start(&timer_d2_pwm);
-
-  f_driver_standby = 1u;
-  r_driver_standby = 1u;
-
-  fr_encoder.start();
-  fl_encoder.start();
-  rr_encoder.start();
-  rl_encoder.start();
-
-  fr_driver.setDirection(tb6612::Direction::FORWARD);
-  fl_driver.setDirection(tb6612::Direction::FORWARD);
-  fr_driver.setDutyCycle(25u);
-  fl_driver.setDutyCycle(25u);
-
-  rr_driver.setDirection(tb6612::Direction::FORWARD);
-  rl_driver.setDirection(tb6612::Direction::FORWARD);
-  rr_driver.setDutyCycle(25u);
-  rl_driver.setDutyCycle(25u);
-
+  initMotorControllers();
   logMessage(LOG_DEBUG, "MotorControlsThread started.\r\n");
 
   for (;;)
   {
     vTaskDelayUntil(&last_wake_time, cycle_time_ticks);
-    logMessage(LOG_MC, "FR = %ld\r\n", fr_encoder.getPulses());
+
+    // Determine the max actuation voltage based on the vbatt measurement
+    meas_vbatt = lpFilter(vbatt_monitor.read(), meas_vbatt, VBATT_FILT_ALPHA);
+    if (meas_vbatt < MAX_MOTOR_VOLTAGE)
+    {
+      max_vbatt = meas_vbatt - tb6612::vdrop;
+    }
+    else
+    {
+      max_vbatt = MAX_MOTOR_VOLTAGE - tb6612::vdrop;
+    }
+
+    fr_controller.step(15.0f, period_s, max_vbatt);
+    fl_controller.step(15.0f, period_s, max_vbatt);
+    rr_controller.step(15.0f, period_s, max_vbatt);
+    rl_controller.step(15.0f, period_s, max_vbatt);
+    logMessage(LOG_INFO, "%f, %f\r\n", meas_vbatt, rr_controller.getSpeed());
   }
+}
+
+static void initMotorControllers(void)
+{
+  fr_controller.startPWM(&f_pwm_timer);
+  fr_controller.setSpeedConstant(FR_KV);
+  fr_controller.setPulses2RadiansFactor(ENCODER_PULSES_TO_RADIANS);
+
+  fl_controller.startPWM(&f_pwm_timer);
+  fl_controller.setSpeedConstant(FL_KV);
+  fl_controller.setPulses2RadiansFactor(ENCODER_PULSES_TO_RADIANS);
+
+  rr_controller.startPWM(&r_pwm_timer);
+  rr_controller.setSpeedConstant(RR_KV);
+  rr_controller.setPulses2RadiansFactor(ENCODER_PULSES_TO_RADIANS);
+
+  rl_controller.startPWM(&r_pwm_timer);
+  rl_controller.setSpeedConstant(RL_KV);
+  rl_controller.setPulses2RadiansFactor(ENCODER_PULSES_TO_RADIANS);
+
+  f_driver_standby = 1u;
+  r_driver_standby = 1u;
 }
