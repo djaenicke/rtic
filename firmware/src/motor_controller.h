@@ -4,6 +4,7 @@
 #include <cstdint>
 
 #include "gpio.h"
+#include "pid.h"
 #include "quadrature_encoder.h"
 #include "tb6612.h"
 
@@ -26,6 +27,7 @@ class MotorController
   void setMode(const ControlMode mode);
   void setSpeedConstant(const float kv);
   void setPulses2RadiansFactor(const float pulses_2_rps);
+  void setGains(const float kp, const float ki, const float kd);
   float getSpeed(void);
 
  private:
@@ -35,6 +37,8 @@ class MotorController
   hal::QuadratureEncoder _encoder;
   //! @brief Control mode, i.e. open loop or closed loop via PID
   ControlMode _mode;
+  //! @brief PID object for closed loop control
+  pid::PID _pid;
   //! @brief DC motor back EMF constant
   float _ke;
   //! @brief Constant to convert pulses into rads

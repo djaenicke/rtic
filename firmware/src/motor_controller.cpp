@@ -1,6 +1,7 @@
 #include "motor_controller.h"
 
 #include <cmath>
+#include <cstdint>
 
 #include "serial_logger.h"
 
@@ -28,7 +29,7 @@ MotorController::MotorController(const tb6612::MotorDriver& driver, const hal::P
 }
 
 /*!
- * @brief This executes the controller.
+ * @brief This method executes the controller.
  *
  * @param[in] sp_rps: The motor speed setpoint (rad/s)
  * @param[in] dt_s: The elapsed time in seconds between executions.
@@ -39,21 +40,33 @@ void MotorController::step(const float sp_rps, const float dt_s, const float max
 {
   // Measure the current shaft speed
   _fb_rps = (_encoder.getPulses() * _pulses_2_rad) / dt_s;
+  _fb_volts = _fb_rps * _ke;
 
   // Compute the voltage setpoint.
   _sp_volts = sp_rps * _ke;
 
-  if (ControlMode::OPEN_LOOP == _mode)
+  if (ControlMode::CLOSED_LOOP_PID == _mode)
   {
-    // Saturate the setpoint to be within the actuator voltage range.
+    _u_volts = _pid.step(_sp_volts,  _fb_volts, dt_s, max_u_volts, 0.0f);
+  }
+  else if (ControlMode::OPEN_LOOP == _mode)
+  {
     const int8_t sign = _sp_volts <= 0.0f ? -1 : 1;
-    _u_volts = fabsf(_sp_volts) < max_u_volts ? _sp_volts : sign * max_u_volts;
+    _u_volts = fabsf(_sp_volts) < max_u_volts ? _sp_volts : (sign * max_u_volts);
+  }
+  else
+  {
+    _u_volts = 0.0f;
   }
 
-  // Convert the actuation voltage to a percent duty cycle
-  _u_percent = static_cast<uint8_t>(fabs(_u_volts) * (100.0f / max_u_volts));
+  // Convert the actuation voltage to a percent duty cycle.
+  _u_percent = static_cast<uint8_t>(fabsf(_u_volts) * (100.0f / max_u_volts));
 
-  _driver.setDirection(tb6612::Direction::FORWARD);
+  // Determine direction
+  const tb6612::Direction dir = std::signbit(_u_volts) ? tb6612::Direction::REVERSE : tb6612::Direction::FORWARD;
+
+  // Set the direction and actuation signal.
+  _driver.setDirection(dir);
   _driver.setDutyCycle(_u_percent);
 }
 
@@ -101,6 +114,19 @@ void MotorController::setPulses2RadiansFactor(const float pulses_2_rad)
 {
   // Store as the back EMF constant
   _pulses_2_rad = pulses_2_rad;
+}
+
+/*!
+ * @brief This method sets the PID gains for the controller.
+ *
+ * @param[in] kp: The proportional gain.
+ * @param[in] ki: The integral gain.
+ * @param[in] kd: The derivative gain.
+ *
+ */
+void MotorController::setGains(const float kp, const float ki, const float kd)
+{
+  _pid.reset(pid::Gains(kp, ki, kd));
 }
 
 /*!
