@@ -1,4 +1,5 @@
 #include "analog_in.h"
+
 #include "serial_logger.h"
 
 namespace hal
@@ -18,7 +19,7 @@ AnalogIn::AnalogIn(const Pin& pin) : GPIO(pin, GpioMode::ANALOG)
   }
 
   __HAL_RCC_ADC1_CLK_ENABLE();
-  
+
   _handle.Instance = ADC1;
   _handle.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
   _handle.Init.Resolution = ADC_RESOLUTION_12B;
@@ -47,7 +48,7 @@ uint16_t AnalogIn::getValue(void)
     HAL_ADC_Start(&_handle);
     if (HAL_OK == HAL_ADC_PollForConversion(&_handle, 5))
     {
-      rv =(uint16_t)HAL_ADC_GetValue(&_handle);
+      rv = (uint16_t)HAL_ADC_GetValue(&_handle);
     }
     HAL_ADC_Stop(&_handle);
   }

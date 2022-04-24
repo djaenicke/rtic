@@ -25,12 +25,7 @@ UART::UART(const uint8_t uart_instance, const GPIO& tx, const GPIO& rx, const ui
       break;
     default:
       _handle.Instance = NULL;
-      break;
-  }
-
-  if (NULL == _handle.Instance)
-  {
-    return;
+      return;
   }
 
   _handle.Init.BaudRate = baudrate;
