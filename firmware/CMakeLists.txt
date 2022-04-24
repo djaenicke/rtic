@@ -41,6 +41,7 @@ set(RELEASE_BUILD_DEFINITIONS -DRELEASE_BUILD -DUSE_HAL_DRIVER -DSTM32F412Rx)
 
 # Create a list of our APP source
 set(APP_SRC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/analog_in.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/board.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/digital_in.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/digital_out.cpp
@@ -50,9 +51,11 @@ set(APP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/quadrature_encoder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/uart.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controls.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/serial_logger.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612/tb6612.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/voltage_monitor.cpp
 )
 
 # Glob together a list of our SDK source
