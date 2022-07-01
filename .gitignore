@@ -14,11 +14,6 @@ _deps
 # KiCad backup files
 *bak
 
-# Unused ST files
-firmware/vendor/st/.cproject
-firmware/vendor/st/.mxproject
-firmware/vendor/st/.project
-
 # Build artifacts
 *.hex
 *.bin

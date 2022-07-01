@@ -15,8 +15,8 @@ QuadratureEncoder::QuadratureEncoder(const Pin& cha, const Pin& chb, const Encod
       _timer_mode(false),
       _encoder_pulses(0),
       _encoder_value(0),
-      _cha(cha, GpioMode::INPUT_BOTH_INT, hal::GpioPullType::NO_PULL, 0U, GpioSpeed::VERY_HIGH),
-      _chb(chb, GpioMode::INPUT_BOTH_INT, hal::GpioPullType::NO_PULL, 0U, GpioSpeed::VERY_HIGH)
+      _cha(cha, GpioMode::INPUT_BOTH_INT),
+      _chb(chb, GpioMode::INPUT_BOTH_INT)
 {
   if ((cha.port == chb.port) && (cha.num == chb.num))
   {

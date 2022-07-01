@@ -11,9 +11,8 @@ set(PROJECT_NAME "rtic")
 set(EXECUTABLE_NAME ${PROJECT_NAME})
 
 # Set your desired flash and debug toolset - Options are PYOCD (default) or JLINK
-# set(DEBUG_TOOLSET "PYOCD")
+set(DEBUG_TOOLSET "PYOCD")
 # set(DEBUG_TOOLSET "JLINK")
-set(DEBUG_TOOLSET "STUTIL")
 
 # Build in the Segger RTT library (set to true to include the Segger RTT library in the application)
 # Default configuration generated will output data to a console in ASCII format
@@ -21,7 +20,7 @@ set(DEBUG_TOOLSET "STUTIL")
 set(ENABLE_SEGGER_RTT false)
 
 # MCU Target name as seen in debug toolset
-set(MCU_TARGET STM32F412xx)
+set(MCU_TARGET LPC5526)
 
 # Set our specific CPU compiler flags
 set(COMPILER_CPU_FLAGS "-mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16")
@@ -32,7 +31,7 @@ set(LINKER_STATIC_LIBRARIES
 )
 
 # Specify the location of our Linker file
-set(CPU_LINKER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/STM32F412RETX_FLASH.ld)
+set(CPU_LINKER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/src/board/STM32F412RETX_FLASH.ld)
 
 # Set debug build specific definitions
 set(DEBUG_BUILD_DEFINITIONS -DDEBUG_BUILD -DUSE_HAL_DRIVER -DSTM32F412Rx -DHSE_VALUE=16000000)
@@ -42,7 +41,6 @@ set(RELEASE_BUILD_DEFINITIONS -DRELEASE_BUILD -DUSE_HAL_DRIVER -DSTM32F412Rx)
 
 # Create a list of our APP source
 set(APP_SRC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/analog_in.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/board.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/digital_in.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/digital_out.cpp
@@ -50,36 +48,22 @@ set(APP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/hw_timer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/pwm.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/quadrature_encoder.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/uart.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controller.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controls.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/pid.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/serial_logger.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/voltage_monitor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612/tb6612.cpp
 )
 
 # Glob together a list of our SDK source
 FILE(GLOB SDK_SRC
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/freertos.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/stm32f4xx_hal_timebase_tim.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/stm32f4xx_it.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/syscalls.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/sysmem.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/system_stm32f4xx.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Src/*.c
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Startup/*.s
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Src/*.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/*.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/*.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/*.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/*.c
 )
 
 # Set all of our application include paths
 set(APP_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612
 )
 
 # Set all of our application and SDK include paths
@@ -89,10 +73,7 @@ set(INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Device/ST/STM32F4xx/Include
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Include
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F      
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/CMSIS/Include           
 )
 
 # Add any subdirectories with CMake projects that should be added
@@ -174,12 +155,9 @@ endforeach()
 if(DEBUG_TOOLSET STREQUAL JLINK)
     include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/debug_jlink.cmake)
     message(STATUS "Using the JLINK toolset")
-elseif(DEBUG_TOOLSET STREQUAL PYOCD)
+else()
     include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/debug_pyocd.cmake)
     message(STATUS "Using the PYOCD toolset")
-else()
-    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/debug_stutil.cmake)
-    message(STATUS "Using the STUTIL toolset")
 endif()
 
 # Extract the current firmware version

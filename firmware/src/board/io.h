@@ -46,19 +46,6 @@
 
 #define D2_STBY hal::Pin(hal::Port::A, 10u)
 
-// clang-format off
-//! @brief Debug UART
-#define DEBUG_TX hal::GPIO(hal::Pin(hal::Port::B, 6U), hal::GpioMode::AF_PUSH_PULL, \
-                 hal::GpioPullType::NO_PULL, GPIO_AF7_USART1, hal::GpioSpeed::VERY_HIGH)
-#define DEBUG_RX hal::GPIO(hal::Pin(hal::Port::B, 7U), hal::GpioMode::AF_PUSH_PULL, \
-                 hal::GpioPullType::NO_PULL, GPIO_AF7_USART1, hal::GpioSpeed::VERY_HIGH)
-// clang-format on
-
-#define VBATT_ADC hal::AnalogIn(hal::Pin(hal::Port::A, 5u))
-#define VBATT_R1 3.3f
-#define VBATT_R2 1.0f
-#define VBATT_SCALE_FACTOR ((3.3f / 4095) * ((VBATT_R1 + VBATT_R2) / (VBATT_R2)))
-
 #define IMU_INT_PIN GPIO_PIN_13
 #define IMU_INT_GPIO_PORT GPIOC
 
@@ -67,6 +54,9 @@
 
 #define HSE_OUT_PIN GPIO_PIN_1
 #define HSE_OUT_GPIO_PORT GPIOH
+
+#define VBATT_AIN_PIN GPIO_PIN_5
+#define VBATT_AIN_GPIO_PORT GPIOA
 
 #define CAN2_RS_PIN GPIO_PIN_10
 #define CAN2_RS_GPIO_PORT GPIOB

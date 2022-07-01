@@ -35,14 +35,6 @@ enum class GpioMode
   NUM_MODES
 };
 
-enum class GpioSpeed
-{
-  LOW = 0,
-  MEDIUM,
-  HIGH,
-  VERY_HIGH
-};
-
 struct Pin
 {
   Port port;
@@ -63,8 +55,11 @@ class GPIO
 {
  public:
   GPIO(const Pin& pin, const GpioMode mode, const GpioPullType pull = GpioPullType::NO_PULL,
-       const uint8_t alt_function = NO_GPIO_ALT_FUNCTION, const GpioSpeed speed = GpioSpeed::LOW);
+       const uint8_t alt_function = NO_GPIO_ALT_FUNCTION);
   operator uint8_t();
+
+ private:
+  void enableClock(void);
 
  protected:
   GPIO_TypeDef* _port_ptr;

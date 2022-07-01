@@ -8,14 +8,13 @@ At a minium you will need the ARM GNU GCC Toolchain, Make and CMake to compile t
 -   Make -  Make is shipped with Linux and should already be present on the developers system. If the developer is running Windows they can either use WSL to run a Linux instance or install Make on Windows via [MinGW](https://sourceforge.net/projects/mingw/)
 -   [CMake](https://cmake.org/download/)
 
-To flash and debug the target this project uses a couple of different tools. PyOCD, Segger JLink, or STLINK can be used as the programming/debugging medium, and a VScode extension called Cortex-Debug gives a user interface within VScode for stepping through the source, settings breakpoints and viewing registers/variables within the target.
+To flash and debug the target this project uses a couple of different tools. PyOCD or Segger JLink can be used as the programming/debugging medium, and a VScode extension called Cortex-Debug gives a user interface within VScode for stepping through the source, settings breakpoints and viewing registers/variables within the target.
 -   [PyOCD](https://github.com/pyocd/pyOCD#installing)
 -   [JLink](https://www.segger.com/downloads/jlink/)
--   [STLINK](https://github.com/stlink-org/stlink)
 -   [VScode](https://code.visualstudio.com/)
 -   [ARM Developer Extension Pack for VScode](https://marketplace.visualstudio.com/items?itemName=Glasslabs.arm-developer-toolkit)
 
-As an alternative to the debuggging tools, dfu-util can be used to program the board using the built in DFU capability of the bootloader.
+As an alternative to PyOCD or Segger JLink, dfu-util can be used to program the board using the built in DFU capability of the bootloader.
 -   [dfu-util](https://manpages.ubuntu.com/manpages/xenial/man1/dfu-util.1.html)
     - Linux - ```sudo apt-get install dfu-util```
 
