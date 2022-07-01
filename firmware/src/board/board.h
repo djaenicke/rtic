@@ -10,8 +10,6 @@ extern "C"
 {
 #endif
   void initBoard(void);
-  void serialTxString(const char* const string);
-  void delayMs(const uint32_t delay_ms);
 #ifdef __cplusplus
 }
 #endif

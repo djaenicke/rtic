@@ -43,7 +43,7 @@ void PwmOut::start(const hal::HwTimer* const timer_instance)
 
 void PwmOut::setDutyCycle(float normalized_dc)
 {
-  // Saturate the
+  // Saturate the duty cycle
   if (normalized_dc > 1.0f)
   {
     normalized_dc = 1.0f;

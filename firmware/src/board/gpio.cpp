@@ -2,34 +2,53 @@
 
 namespace hal
 {
-GPIO::GPIO(const Pin& pin, const GpioMode mode, const GpioPullType pull, const uint8_t alt_function)
+GPIO::GPIO(const Pin& pin, const GpioMode mode, const GpioPullType pull, const uint8_t alt_function,
+           const GpioSpeed speed)
 {
   _pin_select = (1u << pin.num);
 
   switch (pin.port)
   {
     case Port::A:
+      if (0 == READ_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOAEN))
+      {
+        __HAL_RCC_GPIOA_CLK_ENABLE();
+      }
       _port_ptr = GPIOA;
       break;
     case Port::B:
+      if (0 == READ_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOBEN))
+      {
+        __HAL_RCC_GPIOB_CLK_ENABLE();
+      }
       _port_ptr = GPIOB;
       break;
     case Port::C:
+      if (0 == READ_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOCEN))
+      {
+        __HAL_RCC_GPIOC_CLK_ENABLE();
+      }
       _port_ptr = GPIOC;
       break;
     case Port::D:
+      if (0 == READ_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIODEN))
+      {
+        __HAL_RCC_GPIOD_CLK_ENABLE();
+      }
       _port_ptr = GPIOD;
       break;
     case Port::H:
+      if (0 == READ_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOHEN))
+      {
+        __HAL_RCC_GPIOH_CLK_ENABLE();
+      }
       _port_ptr = GPIOH;
       break;
     default:
-      _port_ptr = NULL;
       // todo: assert
+      _port_ptr = NULL;
       return;
   }
-
-  enableClock();
 
   GPIO_InitTypeDef hal_gpio = { 0 };
 
@@ -92,7 +111,7 @@ GPIO::GPIO(const Pin& pin, const GpioMode mode, const GpioPullType pull, const u
       return;
   }
 
-  hal_gpio.Speed = GPIO_SPEED_FREQ_LOW;
+  hal_gpio.Speed = static_cast<uint8_t>(speed);
 
   HAL_GPIO_Init(_port_ptr, &hal_gpio);
 }
@@ -100,39 +119,6 @@ GPIO::GPIO(const Pin& pin, const GpioMode mode, const GpioPullType pull, const u
 GPIO::operator uint8_t()
 {
   return (uint8_t)HAL_GPIO_ReadPin(this->_port_ptr, this->_pin_select);
-}
-
-void GPIO::enableClock(void)
-{
-  // Is the clock enabled for this port?
-  if (GPIOA == _port_ptr)
-  {
-    if (0 == READ_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOAEN))
-    {
-      __HAL_RCC_GPIOA_CLK_ENABLE();
-    }
-  }
-  else if (GPIOB == _port_ptr)
-  {
-    if (0 == READ_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOBEN))
-    {
-      __HAL_RCC_GPIOB_CLK_ENABLE();
-    }
-  }
-  else if (GPIOC == _port_ptr)
-  {
-    if (0 == READ_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOCEN))
-    {
-      __HAL_RCC_GPIOC_CLK_ENABLE();
-    }
-  }
-  else if (GPIOH == _port_ptr)
-  {
-    if (0 == READ_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOHEN))
-    {
-      __HAL_RCC_GPIOH_CLK_ENABLE();
-    }
-  }
 }
 
 }  // namespace hal

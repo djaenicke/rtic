@@ -20,7 +20,7 @@ g
 exit"
 )
 
-write_file(${CMAKE_CURRENT_SOURCE_DIR}/.vscode/launch.json
+write_file(${CMAKE_CURRENT_SOURCE_DIR}/../.vscode/launch.json
 {\n
     \t\"version\": \"0.2.0\",\n
     \t\"configurations\": [\n
@@ -42,7 +42,7 @@ write_file(${CMAKE_CURRENT_SOURCE_DIR}/.vscode/launch.json
 
 if(${ENABLE_SEGGER_RTT})
 
-write_file(${CMAKE_CURRENT_SOURCE_DIR}/.vscode/launch.json
+write_file(${CMAKE_CURRENT_SOURCE_DIR}/../.vscode/launch.json
 \t\t"rttConfig":{\n
     \t\t\t"enabled":true,\n
     \t\t\t"address":"auto",\n
@@ -57,7 +57,7 @@ APPEND)
 
 else()
 
-write_file(${CMAKE_CURRENT_SOURCE_DIR}/.vscode/launch.json
+write_file(${CMAKE_CURRENT_SOURCE_DIR}/../.vscode/launch.json
 \t}]\n
 }
 APPEND)
