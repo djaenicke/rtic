@@ -78,6 +78,7 @@ SET(CMAKE_EXE_LINKER_FLAGS_DEBUG " \
     -Map=output.map \
     -Wl,--print-memory-usage \
     -T${CPU_LINKER_FILE} -static \
+    -u _printf_float \
 ")
 
 SET(CMAKE_EXE_LINKER_FLAGS_RELEASE " \
@@ -103,4 +104,5 @@ SET(CMAKE_EXE_LINKER_FLAGS_RELEASE " \
     -Map=output.map \
     -Wl,--print-memory-usage \
     -T${CPU_LINKER_FILE} -static \
+    -u _printf_float \
 ")
