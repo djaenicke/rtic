@@ -11,8 +11,9 @@ set(PROJECT_NAME "rtic")
 set(EXECUTABLE_NAME ${PROJECT_NAME})
 
 # Set your desired flash and debug toolset - Options are PYOCD (default) or JLINK
-set(DEBUG_TOOLSET "PYOCD")
+# set(DEBUG_TOOLSET "PYOCD")
 # set(DEBUG_TOOLSET "JLINK")
+set(DEBUG_TOOLSET "STUTIL")
 
 # Build in the Segger RTT library (set to true to include the Segger RTT library in the application)
 # Default configuration generated will output data to a console in ASCII format
@@ -20,7 +21,7 @@ set(DEBUG_TOOLSET "PYOCD")
 set(ENABLE_SEGGER_RTT false)
 
 # MCU Target name as seen in debug toolset
-set(MCU_TARGET LPC5526)
+set(MCU_TARGET STM32F412xx)
 
 # Set our specific CPU compiler flags
 set(COMPILER_CPU_FLAGS "-mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16")
@@ -41,6 +42,7 @@ set(RELEASE_BUILD_DEFINITIONS -DRELEASE_BUILD -DUSE_HAL_DRIVER -DSTM32F412Rx)
 
 # Create a list of our APP source
 set(APP_SRC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/analog_in.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/board.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/digital_in.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/digital_out.cpp
@@ -50,9 +52,12 @@ set(APP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/quadrature_encoder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/uart.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controls.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/pid.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/serial_logger.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612/tb6612.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/voltage_monitor.cpp
 )
 
 # Glob together a list of our SDK source
@@ -75,7 +80,6 @@ FILE(GLOB SDK_SRC
 set(APP_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612
 )
 
 # Set all of our application and SDK include paths
@@ -170,9 +174,12 @@ endforeach()
 if(DEBUG_TOOLSET STREQUAL JLINK)
     include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/debug_jlink.cmake)
     message(STATUS "Using the JLINK toolset")
-else()
+elseif(DEBUG_TOOLSET STREQUAL PYOCD)
     include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/debug_pyocd.cmake)
     message(STATUS "Using the PYOCD toolset")
+else()
+    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/debug_stutil.cmake)
+    message(STATUS "Using the STUTIL toolset")
 endif()
 
 # Extract the current firmware version
