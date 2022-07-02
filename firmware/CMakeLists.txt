@@ -51,7 +51,9 @@ set(APP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/i2c.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/pwm.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/quadrature_encoder.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/timing.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/uart.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/bmi160.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/imu_interface.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controller.cpp
