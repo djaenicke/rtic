@@ -30,7 +30,7 @@ float PID::step(const float sp, const float fb, const float dt, const float max,
   }
 
   d = (e - last_e_) / dt;
-  ti += (((e + last_e_) / 2.0f) * dt); // Trapezoidal integration
+  ti += (((e + last_e_) / 2.0f) * dt);  // Trapezoidal integration
 
   u = (kp_ * e) + (ki_ * integral_) + (kd_ * d);
 
