@@ -81,8 +81,8 @@ bool I2CMaster::receive_blocking(const uint16_t dev_addr, uint8_t* const data, c
 bool I2CMaster::read_device_memory(const uint16_t dev_addr, const uint16_t start_reg,
                                    uint8_t* const data, const uint16_t size)
 {
-  if (HAL_OK ==
-      HAL_I2C_Mem_Read(&_handle, (dev_addr << 1u), start_reg, 1u, (uint8_t*)data, size, HAL_MAX_DELAY))
+  if (HAL_OK == HAL_I2C_Mem_Read(&_handle, (dev_addr << 1u), start_reg, 1u, (uint8_t*)data, size,
+                                 HAL_MAX_DELAY))
   {
     return true;
   }
@@ -90,6 +90,11 @@ bool I2CMaster::read_device_memory(const uint16_t dev_addr, const uint16_t start
   {
     return false;
   }
+}
+
+const I2C_HandleTypeDef* const I2CMaster::get_handle(void)
+{
+  return &_handle;
 }
 
 }  // namespace hal

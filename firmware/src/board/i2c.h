@@ -19,6 +19,7 @@ class I2CMaster
   bool receive_blocking(const uint16_t dev_addr, uint8_t* const data, const uint16_t size);
   bool read_device_memory(const uint16_t dev_addr, const uint16_t start_reg, uint8_t* const data,
                           const uint16_t size);
+  const I2C_HandleTypeDef* const get_handle(void);
 
  private:
   hal::GPIO _scl;
