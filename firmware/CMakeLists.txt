@@ -87,6 +87,7 @@ set(APP_INCLUDES
 # Set all of our application and SDK include paths
 set(INCLUDE_DIRS
     ${APP_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/bosch
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
@@ -131,6 +132,7 @@ include_directories(${INCLUDE_DIRS})
 add_executable(${EXECUTABLE_NAME}
     ${APP_SRC}
     ${SDK_SRC}
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/bosch/bmi160.c
 )
 
 # Link against any specificed libs
