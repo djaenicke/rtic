@@ -50,6 +50,8 @@ void threadSerialLogger(const void* argument)
   static TickType_t last_wake_time = xTaskGetTickCount();
   const TickType_t cycle_time_ticks = SERIAL_LOGGER_PERIOD_MS * portTICK_PERIOD_MS;
 
+  logMessage(LOG_DEBUG, "SerialLoggerThread started.\r\n");
+
   for (;;)
   {
     vTaskDelayUntil(&last_wake_time, cycle_time_ticks);

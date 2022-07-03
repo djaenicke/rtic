@@ -47,7 +47,7 @@ void MotorController::step(const float sp_rps, const float dt_s, const float max
 
   if (ControlMode::CLOSED_LOOP_PID == _mode)
   {
-    _u_volts = _pid.step(_sp_volts,  _fb_volts, dt_s, max_u_volts, 0.0f);
+    _u_volts = _pid.step(_sp_volts, _fb_volts, dt_s, max_u_volts, 0.0f);
   }
   else if (ControlMode::OPEN_LOOP == _mode)
   {
@@ -63,7 +63,8 @@ void MotorController::step(const float sp_rps, const float dt_s, const float max
   _u_percent = static_cast<uint8_t>(fabsf(_u_volts) * (100.0f / max_u_volts));
 
   // Determine direction
-  const tb6612::Direction dir = std::signbit(_u_volts) ? tb6612::Direction::REVERSE : tb6612::Direction::FORWARD;
+  const tb6612::Direction dir =
+      std::signbit(_u_volts) ? tb6612::Direction::REVERSE : tb6612::Direction::FORWARD;
 
   // Set the direction and actuation signal.
   _driver.setDirection(dir);

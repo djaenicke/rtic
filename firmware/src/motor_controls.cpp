@@ -68,11 +68,10 @@ void threadMotorControls(const void* argument)
       max_vbatt = MAX_MOTOR_VOLTAGE - tb6612::vdrop;
     }
 
-    fr_controller.step(10.0f, period_s, max_vbatt);
-    fl_controller.step(10.0f, period_s, max_vbatt);
-    rr_controller.step(10.0f, period_s, max_vbatt);
-    rl_controller.step(10.0f, period_s, max_vbatt);
-    logMessage(LOG_INFO, "%f, %f\r\n", meas_vbatt, fr_controller.getSpeed());
+    fr_controller.step(0.0f, period_s, max_vbatt);
+    fl_controller.step(0.0f, period_s, max_vbatt);
+    rr_controller.step(0.0f, period_s, max_vbatt);
+    rl_controller.step(0.0f, period_s, max_vbatt);
   }
 }
 

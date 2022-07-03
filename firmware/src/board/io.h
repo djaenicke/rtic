@@ -52,15 +52,20 @@
                  hal::GpioPullType::NO_PULL, GPIO_AF7_USART1, hal::GpioSpeed::VERY_HIGH)
 #define DEBUG_RX hal::GPIO(hal::Pin(hal::Port::B, 7U), hal::GpioMode::AF_PUSH_PULL, \
                  hal::GpioPullType::NO_PULL, GPIO_AF7_USART1, hal::GpioSpeed::VERY_HIGH)
+
+//! @brief IMU I2C
+#define IMU_DEV_ADDR 0x69u
+#define IMU_SCL hal::GPIO(hal::Pin(hal::Port::B, 8U), hal::GpioMode::AF_OPEN_DRAIN, \
+                hal::GpioPullType::NO_PULL, GPIO_AF4_I2C1, hal::GpioSpeed::VERY_HIGH)
+#define IMU_SDA hal::GPIO(hal::Pin(hal::Port::B, 9U), hal::GpioMode::AF_OPEN_DRAIN, \
+                hal::GpioPullType::NO_PULL, GPIO_AF4_I2C1, hal::GpioSpeed::VERY_HIGH)
+#define IMU_INT hal::Pin(hal::Port::C, 13u)
 // clang-format on
 
 #define VBATT_ADC hal::AnalogIn(hal::Pin(hal::Port::A, 5u))
 #define VBATT_R1 3.3f
 #define VBATT_R2 1.0f
 #define VBATT_SCALE_FACTOR ((3.3f / 4095) * ((VBATT_R1 + VBATT_R2) / (VBATT_R2)))
-
-#define IMU_INT_PIN GPIO_PIN_13
-#define IMU_INT_GPIO_PORT GPIOC
 
 #define HSE_IN_PIN GPIO_PIN_0
 #define HSE_IN_GPIO_PORT GPIOH
@@ -88,11 +93,5 @@
 
 #define RF_EN_PIN GPIO_PIN_5
 #define RF_EN_GPIO_PORT GPIOB
-
-#define IMU_SCL_PIN GPIO_PIN_8
-#define IMU_SCL_GPIO_PORT GPIOB
-
-#define IMU_SDA_PIN GPIO_PIN_9
-#define IMU_SDA_GPIO_PORT GPIOB
 
 #endif  // IO_H

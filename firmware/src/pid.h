@@ -17,7 +17,7 @@ class PID
   float kp_;
   float ki_;
   float kd_;
-  float tol_; // Tolerance
+  float tol_;  // Tolerance
   float last_e_;
   float integral_;
 
