@@ -1,24 +1,72 @@
 #include "bmi160.h"
 
+#include <cassert>
+#include <functional>
+
 #include "timing.h"
+
+// Templating magic in order to attach a static member funciton for the read callback
+template <typename T>
+struct ReadCallback;
+
+template <typename Ret, typename... Params>
+struct ReadCallback<Ret(Params...)>
+{
+  template <typename... Args>
+  static Ret read_callback(Args... args)
+  {
+    return func(args...);
+  }
+  static std::function<Ret(Params...)> func;
+};
+
+template <typename Ret, typename... Params>
+std::function<Ret(Params...)> ReadCallback<Ret(Params...)>::func;
+
+// Templating magic in order to attach a static member funciton for the write callback
+template <typename T>
+struct WriteCallback;
+
+template <typename Ret, typename... Params>
+struct WriteCallback<Ret(Params...)>
+{
+  template <typename... Args>
+  static Ret write_callback(Args... args)
+  {
+    return func(args...);
+  }
+  static std::function<Ret(Params...)> func;
+};
+
+template <typename Ret, typename... Params>
+std::function<Ret(Params...)> WriteCallback<Ret(Params...)>::func;
 
 namespace bmi160
 {
 static const float PI = 3.14159265359f;
 static const float G = 9.81;
-static const I2C_HandleTypeDef* i2c_handle;
 
 IMU::IMU(const hal::I2CMaster& i2c, const uint8_t dev_addr) : _i2c(i2c)
 {
-  i2c_handle = _i2c.get_handle();
+  ReadCallback<int8_t(uint8_t, uint8_t, uint8_t*, uint16_t)>::func =
+      std::bind(&hal::I2CMaster::read_device_memory, &_i2c, std::placeholders::_1,
+                std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
+  bmi160_read_fptr_t read_func = static_cast<bmi160_read_fptr_t>(
+      ReadCallback<int8_t(uint8_t, uint8_t, uint8_t*, uint16_t)>::read_callback);
+
+  WriteCallback<int8_t(uint8_t, uint8_t, uint8_t*, uint16_t)>::func =
+      std::bind(&hal::I2CMaster::write_device_memory, &_i2c, std::placeholders::_1,
+                std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
+  bmi160_read_fptr_t write_func = static_cast<bmi160_read_fptr_t>(
+      WriteCallback<int8_t(uint8_t, uint8_t, uint8_t*, uint16_t)>::write_callback);
 
   // Set the interface mode to I2C and set the device address
   _handle.intf = BMI160_I2C_INTF;
   _handle.id = (dev_addr << 1u);  // left shift here for HAL compatibility
 
   // Attach the callbacks
-  _handle.read = &read_callback;
-  _handle.write = &write_callback;
+  _handle.read = read_func;
+  _handle.write = write_func;
   _handle.delay_ms = &delay_ms;
 }
 
@@ -52,7 +100,7 @@ bool IMU::init(const AccelRange accel_range, const GyroRange gyro_range)
       _accel_scaling = 16.0f / 32768.0f * G;
       break;
     default:
-      // todo assert
+      assert(0);
       return false;
   }
 
@@ -79,7 +127,7 @@ bool IMU::init(const AccelRange accel_range, const GyroRange gyro_range)
       _gyro_scaling = 2000.0 / 32768.0 * (PI / 180);
       break;
     default:
-      // todo assert
+      assert(0);
       return false;
   }
 
@@ -117,32 +165,6 @@ bool IMU::get_sensor_data(SensorData& data)
   else
   {
     return false;
-  }
-}
-
-int8_t IMU::read_callback(uint8_t dev_addr, uint8_t reg_addr, uint8_t* read_data, uint16_t len)
-{
-  if (HAL_OK == HAL_I2C_Mem_Read((I2C_HandleTypeDef*)i2c_handle, dev_addr, reg_addr,
-                                 I2C_MEMADD_SIZE_8BIT, read_data, len, HAL_MAX_DELAY))
-  {
-    return 0;
-  }
-  else
-  {
-    return -1;
-  }
-}
-
-int8_t IMU::write_callback(uint8_t dev_addr, uint8_t reg_addr, uint8_t* data, uint16_t len)
-{
-  if (HAL_OK == HAL_I2C_Mem_Write((I2C_HandleTypeDef*)i2c_handle, dev_addr, reg_addr,
-                                  I2C_MEMADD_SIZE_8BIT, data, len, HAL_MAX_DELAY))
-  {
-    return 0;
-  }
-  else
-  {
-    return -1;
   }
 }
 

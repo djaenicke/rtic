@@ -7,6 +7,8 @@
 #include "serial_logger.h"
 #include "threads.h"
 
+#define LOG_SENSOR_DATA 0
+
 static bmi160::IMU imu(hal::I2CMaster(1u, IMU_SCL, IMU_SDA, 100000u), IMU_DEV_ADDR);
 
 void threadImuInterface(const void* argument)
@@ -39,10 +41,12 @@ void threadImuInterface(const void* argument)
   {
     if (imu.get_sensor_data(sensor_data))
     {
+#if LOG_SENSOR_DATA
       logMessage(LOG_DEBUG, "lin_acc_mps2 (x, y, z) = (%f, %f, %f)\r\n", sensor_data.lin_acc_mps2.x,
                  sensor_data.lin_acc_mps2.y, sensor_data.lin_acc_mps2.z);
       logMessage(LOG_DEBUG, "ang_vel_rps (x, y, z) = (%f, %f, %f)\r\n", sensor_data.ang_vel_rps.x,
                  sensor_data.ang_vel_rps.y, sensor_data.ang_vel_rps.z);
+#endif
     }
     vTaskDelayUntil(&last_wake_time, cycle_time_ticks);
   }

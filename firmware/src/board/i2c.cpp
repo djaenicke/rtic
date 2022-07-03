@@ -2,6 +2,8 @@
 
 #include <stdlib.h>
 
+#include <cassert>
+
 namespace hal
 {
 I2CMaster::I2CMaster(const uint8_t i2c_instance, const GPIO& scl, const GPIO& sda,
@@ -23,6 +25,7 @@ I2CMaster::I2CMaster(const uint8_t i2c_instance, const GPIO& scl, const GPIO& sd
       _handle.Instance = I2C3;
       break;
     default:
+      assert(0);
       _handle.Instance = NULL;
       return;
   }
@@ -39,62 +42,72 @@ I2CMaster::I2CMaster(const uint8_t i2c_instance, const GPIO& scl, const GPIO& sd
   HAL_I2C_Init(&_handle);
 }
 
-bool I2CMaster::student_ready(const uint16_t dev_addr)
+int8_t I2CMaster::student_ready(const uint16_t dev_addr)
 {
   if (HAL_OK == HAL_I2C_IsDeviceReady(&_handle, (dev_addr << 1u), 100u, HAL_MAX_DELAY))
   {
-    return true;
+    return 0;
   }
   else
   {
-    return false;
+    return -1;
   }
 }
 
-bool I2CMaster::transmit_blocking(const uint16_t dev_addr, const uint8_t* const data,
-                                  const uint16_t size)
+int8_t I2CMaster::transmit_blocking(const uint16_t dev_addr, const uint8_t* const data,
+                                    const uint16_t size)
 {
   if (HAL_OK ==
       HAL_I2C_Master_Transmit(&_handle, (dev_addr << 1u), (uint8_t*)data, size, HAL_MAX_DELAY))
   {
-    return true;
+    return 0;
   }
   else
   {
-    return false;
+    return -1;
   }
 }
 
-bool I2CMaster::receive_blocking(const uint16_t dev_addr, uint8_t* const data, const uint16_t size)
+int8_t I2CMaster::receive_blocking(const uint16_t dev_addr, uint8_t* const data,
+                                   const uint16_t size)
 {
   if (HAL_OK ==
       HAL_I2C_Master_Receive(&_handle, (dev_addr << 1u), (uint8_t*)data, size, HAL_MAX_DELAY))
   {
-    return true;
+    return 0;
   }
   else
   {
-    return false;
+    return -1;
   }
 }
 
-bool I2CMaster::read_device_memory(const uint16_t dev_addr, const uint16_t start_reg,
-                                   uint8_t* const data, const uint16_t size)
+int8_t I2CMaster::read_device_memory(uint8_t dev_addr, uint8_t reg_addr, uint8_t* data,
+                                     uint16_t len)
 {
-  if (HAL_OK == HAL_I2C_Mem_Read(&_handle, (dev_addr << 1u), start_reg, 1u, (uint8_t*)data, size,
+  if (HAL_OK == HAL_I2C_Mem_Read(&_handle, dev_addr, reg_addr, I2C_MEMADD_SIZE_8BIT, data, len,
                                  HAL_MAX_DELAY))
   {
-    return true;
+    return 0;
   }
   else
   {
-    return false;
+    return -1;
   }
 }
 
-const I2C_HandleTypeDef* const I2CMaster::get_handle(void)
+int8_t I2CMaster::write_device_memory(uint8_t dev_addr, uint8_t reg_addr, uint8_t* data,
+                                      uint16_t len)
 {
-  return &_handle;
+  if (HAL_OK == HAL_I2C_Mem_Write(&_handle, dev_addr, reg_addr, I2C_MEMADD_SIZE_8BIT, data, len,
+                                  HAL_MAX_DELAY))
+  {
+    return 0;
+  }
+  else
+  {
+    return -1;
+  }
 }
 
 }  // namespace hal
