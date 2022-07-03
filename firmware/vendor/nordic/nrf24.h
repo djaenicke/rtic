@@ -1,6 +1,10 @@
 #ifndef __NRF24_H
 #define __NRF24_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 // Low level functions (hardware depended)
 #include "nrf24_hal.h"
@@ -211,5 +215,9 @@ void nRF24_ClearIRQFlags(void);
 
 void nRF24_WritePayload(uint8_t *pBuf, uint8_t length);
 nRF24_RXResult nRF24_ReadPayload(uint8_t *pBuf, uint8_t *length);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __NRF24_H

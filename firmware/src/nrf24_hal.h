@@ -3,8 +3,11 @@
 
 #include <stdint.h>
 
-#define nRF24_CSN_L  // todo
-#define nRF24_CSN_H  // todo
+#include "rf_interface.h"
+
+#define nRF24_CSN_L enableNrf24ChipSelect()
+#define nRF24_CSN_H disableNrf24ChipSelect()
+#define nRF24_LL_RW readWriteNrf24
 
 uint8_t nRF24_LL_RW(uint8_t data);
 

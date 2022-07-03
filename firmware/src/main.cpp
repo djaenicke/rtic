@@ -6,6 +6,7 @@
 #include "imu_interface.h"
 #include "io.h"
 #include "motor_controls.h"
+#include "rf_interface.h"
 #include "serial_logger.h"
 #include "threads.h"
 
@@ -32,6 +33,18 @@ const osThreadDef_t serial_logger_thread_def = {
   SERIAL_LOGGER_PRIORITY,
   0u,
   SERIAL_LOGGER_STACK_SIZE_WORDS,
+  NULL,
+  NULL
+};
+
+static osThreadId rf_interface_thread_handle;
+static char rf_interface_thread_name[] = "RfInterfaceThread";
+const osThreadDef_t rf_interface_thread_def = { 
+  rf_interface_thread_name,
+  threadRfInterface,
+  RF_INTERFACE_PRIORITY,
+  0u,
+  RF_INTERFACE_STACK_SIZE_WORDS,
   NULL,
   NULL
 };
@@ -68,6 +81,7 @@ int main(void)
   // Create the threads
   heartbeat_thread_handle = osThreadCreate(&heartbeat_thread_def, NULL);
   serial_logger_thread_handle = osThreadCreate(&serial_logger_thread_def, NULL);
+  rf_interface_thread_handle = osThreadCreate(&rf_interface_thread_def, NULL);
   imu_interface_thread_handle = osThreadCreate(&imu_interface_thread_def, NULL);
   motor_controls_thread_handle = osThreadCreate(&motor_controls_thread_def, NULL);
 

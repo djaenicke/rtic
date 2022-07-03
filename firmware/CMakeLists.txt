@@ -51,6 +51,7 @@ set(APP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/i2c.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/pwm.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/quadrature_encoder.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/spi.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/timing.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/uart.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/assert.c
@@ -60,6 +61,7 @@ set(APP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controls.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/pid.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rf_interface.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/serial_logger.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/voltage_monitor.cpp
