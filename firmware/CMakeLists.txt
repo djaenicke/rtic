@@ -91,6 +91,7 @@ set(APP_INCLUDES
 set(INCLUDE_DIRS
     ${APP_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/bosch
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/nordic
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
@@ -136,6 +137,7 @@ add_executable(${EXECUTABLE_NAME}
     ${APP_SRC}
     ${SDK_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/bosch/bmi160.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/nordic/nrf24.c
 )
 
 # Link against any specificed libs
