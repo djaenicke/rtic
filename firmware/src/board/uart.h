@@ -12,7 +12,7 @@ class UART
 {
  public:
   UART(const uint8_t uart_instance, const GPIO& tx, const GPIO& rx, const uint32_t baudrate);
-  void transmit_blocking(const uint8_t* const buf, const uint16_t buf_len);
+  void transmitBlocking(const uint8_t* const buf, const uint16_t buf_len);
 
  private:
   hal::GPIO _tx;

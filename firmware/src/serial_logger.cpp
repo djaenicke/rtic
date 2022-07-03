@@ -32,7 +32,7 @@ void initSerialLogger(const LogLevel desired_logging_level)
   }
 
   logging_level = desired_logging_level;
-  serial.transmit_blocking((uint8_t*)buf, strnlen(buf, MAX_MSG_LEN));
+  serial.transmitBlocking((uint8_t*)buf, strnlen(buf, MAX_MSG_LEN));
 }
 
 void sendMessage(const LogLevel msg_log_level, const char* const msg)
@@ -57,7 +57,7 @@ void threadSerialLogger(const void* argument)
     vTaskDelayUntil(&last_wake_time, cycle_time_ticks);
     if (pdTRUE == xQueueReceive(msg_queue_handle, (void*)tx_msg, 0))
     {
-      serial.transmit_blocking(tx_msg, strnlen((char*)tx_msg, MAX_MSG_LEN));
+      serial.transmitBlocking(tx_msg, strnlen((char*)tx_msg, MAX_MSG_LEN));
     }
   }
 }
