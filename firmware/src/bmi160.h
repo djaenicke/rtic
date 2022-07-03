@@ -51,8 +51,6 @@ class IMU
   bmi160_offsets _offsets;
   float _accel_scaling;
   float _gyro_scaling;
-  static int8_t read_callback(uint8_t dev_addr, uint8_t reg_addr, uint8_t* read_data, uint16_t len);
-  static int8_t write_callback(uint8_t dev_addr, uint8_t reg_addr, uint8_t* data, uint16_t len);
 };
 }  // namespace bmi160
 

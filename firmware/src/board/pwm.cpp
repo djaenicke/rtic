@@ -1,5 +1,6 @@
 #include "pwm.h"
 
+#include <cassert>
 #include <cmath>
 
 namespace hal
@@ -23,7 +24,7 @@ PwmOut::PwmOut(const hal::PwmPin& pwm_pin)
       _tim_channel = TIM_CHANNEL_4;
       break;
     default:
-      // todo: assert
+      assert(0);
       _tim_channel = TIM_CHANNEL_1;
   }
 }
@@ -32,7 +33,7 @@ void PwmOut::start(const hal::HwTimer* const timer_instance)
 {
   if (NULL == timer_instance)
   {
-    // todo: assert
+    assert(0);
     return;
   }
 
