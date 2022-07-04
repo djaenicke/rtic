@@ -1,7 +1,7 @@
 #ifndef BMI160_H
 #define BMI160_H (1)
 
-#include "../vendor/bosch/bmi160.h"
+#include "../../vendor/bosch/bmi160.h"
 #include "i2c.h"
 
 namespace bmi160

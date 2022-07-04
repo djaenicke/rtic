@@ -76,7 +76,9 @@ const osThreadDef_t motor_controls_thread_def = {
 
 int main(void)
 {
+  // Configure the system prior to starting the threads
   initSerialLogger(LOG_DEBUG);
+  initUiMessageBuffer();
 
   // Create the threads
   heartbeat_thread_handle = osThreadCreate(&heartbeat_thread_def, NULL);

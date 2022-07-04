@@ -6,6 +6,7 @@
 #include "hw_timer.h"
 #include "io.h"
 #include "low_pass_filter.h"
+#include "manual_control.h"
 #include "motor_config.h"
 #include "motor_controller.h"
 #include "pwm.h"
@@ -45,10 +46,12 @@ static void initMotorControllers(void);
 void threadMotorControls(const void* argument)
 {
   static TickType_t last_wake_time = xTaskGetTickCount();
-  const TickType_t cycle_time_ticks = MOTOR_CONTROLS_PERIOD_MS * portTICK_PERIOD_MS;
+  const TickType_t cycle_time_ticks = MOTOR_CONTROLS_PERIOD_MS / portTICK_PERIOD_MS;
   const float period_s = MOTOR_CONTROLS_PERIOD_MS / 1000.0f;
   static float meas_vbatt = 0.0f;
   static float max_vbatt = 0.0f;
+  static bool manual_control_active = false;
+  static WheelSpeeds cmd;
 
   initMotorControllers();
   logMessage(LOG_DEBUG, "MotorControlsThread started.\r\n");
@@ -68,10 +71,19 @@ void threadMotorControls(const void* argument)
       max_vbatt = MAX_MOTOR_VOLTAGE - tb6612::vdrop;
     }
 
-    fr_controller.step(0.0f, period_s, max_vbatt);
-    fl_controller.step(0.0f, period_s, max_vbatt);
-    rr_controller.step(0.0f, period_s, max_vbatt);
-    rl_controller.step(0.0f, period_s, max_vbatt);
+    processManualControl(&manual_control_active, &cmd);
+    if (!manual_control_active)
+    {
+      cmd.fr_rps = 0.0f;
+      cmd.fl_rps = 0.0f;
+      cmd.rr_rps = 0.0f;
+      cmd.rl_rps = 0.0f;
+    }
+
+    fr_controller.step(cmd.fr_rps, period_s, max_vbatt);
+    fl_controller.step(cmd.fl_rps, period_s, max_vbatt);
+    rr_controller.step(cmd.rr_rps, period_s, max_vbatt);
+    rl_controller.step(cmd.rl_rps, period_s, max_vbatt);
   }
 }
 
