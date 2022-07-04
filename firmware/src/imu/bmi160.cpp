@@ -3,7 +3,7 @@
 #include <cassert>
 #include <functional>
 
-#include "timing.h"
+#include "board.h"
 
 // Templating magic in order to attach a static member funciton for the read callback
 template <typename T>
