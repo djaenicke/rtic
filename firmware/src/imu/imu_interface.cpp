@@ -13,8 +13,7 @@ static bmi160::IMU imu(hal::I2CMaster(1u, IMU_SCL, IMU_SDA, 100000u), IMU_DEV_AD
 
 void threadImuInterface(const void* argument)
 {
-  static TickType_t last_wake_time = xTaskGetTickCount();
-  const TickType_t cycle_time_ticks = IMU_INTERFACE_PERIOD_MS * portTICK_PERIOD_MS;
+  const TickType_t cycle_time_ticks = IMU_INTERFACE_PERIOD_MS / portTICK_PERIOD_MS;
   static bmi160::SensorData sensor_data;
 
   if (imu.init(bmi160::RANGE_2G, bmi160::RANGE_500_DPS))
@@ -35,7 +34,10 @@ void threadImuInterface(const void* argument)
     logMessage(LOG_ERROR, "IMU offset compensation failed.\r\n");
   }
 
+  vTaskDelay(IMU_INTERFACE_POST_INIT_DELAY_MS / portTICK_PERIOD_MS);
   logMessage(LOG_DEBUG, "ImuInterfaceThread started.\r\n");
+
+  static TickType_t last_wake_time = xTaskGetTickCount();
 
   for (;;)
   {

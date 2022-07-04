@@ -53,6 +53,7 @@ set(APP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/quadrature_encoder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/spi.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/uart.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/controls/manual_control.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/imu/bmi160.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/imu/imu_interface.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/logging/serial_logger.cpp
@@ -86,6 +87,7 @@ FILE(GLOB SDK_SRC
 set(APP_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/controls
     ${CMAKE_CURRENT_SOURCE_DIR}/src/imu
     ${CMAKE_CURRENT_SOURCE_DIR}/src/logging
     ${CMAKE_CURRENT_SOURCE_DIR}/src/motors
