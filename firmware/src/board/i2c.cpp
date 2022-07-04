@@ -1,7 +1,5 @@
 #include "i2c.h"
 
-#include <stdlib.h>
-
 #include <cassert>
 
 namespace hal
@@ -42,7 +40,7 @@ I2CMaster::I2CMaster(const uint8_t i2c_instance, const GPIO& scl, const GPIO& sd
   HAL_I2C_Init(&_handle);
 }
 
-int8_t I2CMaster::student_ready(const uint16_t dev_addr)
+int8_t I2CMaster::studentReady(const uint16_t dev_addr)
 {
   if (HAL_OK == HAL_I2C_IsDeviceReady(&_handle, (dev_addr << 1u), 100u, HAL_MAX_DELAY))
   {
@@ -54,8 +52,8 @@ int8_t I2CMaster::student_ready(const uint16_t dev_addr)
   }
 }
 
-int8_t I2CMaster::transmit_blocking(const uint16_t dev_addr, const uint8_t* const data,
-                                    const uint16_t size)
+int8_t I2CMaster::transmitBlocking(const uint16_t dev_addr, const uint8_t* const data,
+                                   const uint16_t size)
 {
   if (HAL_OK ==
       HAL_I2C_Master_Transmit(&_handle, (dev_addr << 1u), (uint8_t*)data, size, HAL_MAX_DELAY))
@@ -68,8 +66,7 @@ int8_t I2CMaster::transmit_blocking(const uint16_t dev_addr, const uint8_t* cons
   }
 }
 
-int8_t I2CMaster::receive_blocking(const uint16_t dev_addr, uint8_t* const data,
-                                   const uint16_t size)
+int8_t I2CMaster::receiveBlocking(const uint16_t dev_addr, uint8_t* const data, const uint16_t size)
 {
   if (HAL_OK ==
       HAL_I2C_Master_Receive(&_handle, (dev_addr << 1u), (uint8_t*)data, size, HAL_MAX_DELAY))
@@ -82,8 +79,8 @@ int8_t I2CMaster::receive_blocking(const uint16_t dev_addr, uint8_t* const data,
   }
 }
 
-int8_t I2CMaster::read_device_memory(uint8_t dev_addr, uint8_t reg_addr, uint8_t* data,
-                                     uint16_t len)
+int8_t I2CMaster::readDeviceMemory(const uint8_t dev_addr, const uint8_t reg_addr, uint8_t* data,
+                                   const uint16_t len)
 {
   if (HAL_OK == HAL_I2C_Mem_Read(&_handle, dev_addr, reg_addr, I2C_MEMADD_SIZE_8BIT, data, len,
                                  HAL_MAX_DELAY))
@@ -96,8 +93,8 @@ int8_t I2CMaster::read_device_memory(uint8_t dev_addr, uint8_t reg_addr, uint8_t
   }
 }
 
-int8_t I2CMaster::write_device_memory(uint8_t dev_addr, uint8_t reg_addr, uint8_t* data,
-                                      uint16_t len)
+int8_t I2CMaster::writeDeviceMemory(const uint8_t dev_addr, const uint8_t reg_addr, uint8_t* data,
+                                    const uint16_t len)
 {
   if (HAL_OK == HAL_I2C_Mem_Write(&_handle, dev_addr, reg_addr, I2C_MEMADD_SIZE_8BIT, data, len,
                                   HAL_MAX_DELAY))

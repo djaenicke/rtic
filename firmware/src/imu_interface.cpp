@@ -26,7 +26,7 @@ void threadImuInterface(const void* argument)
     logMessage(LOG_ERROR, "IMU initialization failed.\r\n");
   }
 
-  if (imu.perform_foc())
+  if (imu.performFOC())
   {
     logMessage(LOG_DEBUG, "IMU offset compensation completed.\r\n");
   }
@@ -39,7 +39,7 @@ void threadImuInterface(const void* argument)
 
   for (;;)
   {
-    if (imu.get_sensor_data(sensor_data))
+    if (imu.getSensorData(sensor_data))
     {
 #if LOG_SENSOR_DATA
       logMessage(LOG_DEBUG, "lin_acc_mps2 (x, y, z) = (%f, %f, %f)\r\n", sensor_data.lin_acc_mps2.x,

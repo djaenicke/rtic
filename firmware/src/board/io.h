@@ -60,6 +60,17 @@
 #define IMU_SDA hal::GPIO(hal::Pin(hal::Port::B, 9U), hal::GpioMode::AF_OPEN_DRAIN, \
                 hal::GpioPullType::NO_PULL, GPIO_AF4_I2C1, hal::GpioSpeed::VERY_HIGH)
 #define IMU_INT hal::Pin(hal::Port::C, 13u)
+
+//! @brief NRF24 SPI
+#define RF_MOSI hal::GPIO(hal::Pin(hal::Port::C, 12U), hal::GpioMode::AF_PUSH_PULL, \
+                hal::GpioPullType::NO_PULL, GPIO_AF6_SPI3, hal::GpioSpeed::VERY_HIGH)
+#define RF_MISO hal::GPIO(hal::Pin(hal::Port::C, 11U), hal::GpioMode::AF_PUSH_PULL, \
+                hal::GpioPullType::NO_PULL, GPIO_AF6_SPI3, hal::GpioSpeed::VERY_HIGH)
+#define RF_SCK  hal::GPIO(hal::Pin(hal::Port::C, 10U), hal::GpioMode::AF_PUSH_PULL, \
+                hal::GpioPullType::NO_PULL, GPIO_AF6_SPI3, hal::GpioSpeed::VERY_HIGH)
+#define RF_CS   hal::Pin(hal::Port::D, 2u)
+#define RF_IRQ  hal::Pin(hal::Port::B, 4u)
+#define RF_EN   hal::Pin(hal::Port::B, 5u)
 // clang-format on
 
 #define VBATT_ADC hal::AnalogIn(hal::Pin(hal::Port::A, 5u))
@@ -75,23 +86,5 @@
 
 #define CAN2_RS_PIN GPIO_PIN_10
 #define CAN2_RS_GPIO_PORT GPIOB
-
-#define RF_SCK_PIN GPIO_PIN_10
-#define RF_SCK_GPIO_PORT GPIOC
-
-#define RF_MISO_PIN GPIO_PIN_11
-#define RF_MISO_GPIO_PORT GPIOC
-
-#define RF_MOSI_PIN GPIO_PIN_12
-#define RF_MOSI_GPIO_PORT GPIOC
-
-#define RF_CS_PIN GPIO_PIN_2
-#define RF_CS_GPIO_PORT GPIOD
-
-#define RF_IRQ_PIN GPIO_PIN_4
-#define RF_IRQ_GPIO_PORT GPIOB
-
-#define RF_EN_PIN GPIO_PIN_5
-#define RF_EN_GPIO_PORT GPIOB
 
 #endif  // IO_H

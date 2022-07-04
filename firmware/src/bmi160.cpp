@@ -49,13 +49,13 @@ static const float G = 9.81;
 IMU::IMU(const hal::I2CMaster& i2c, const uint8_t dev_addr) : _i2c(i2c)
 {
   ReadCallback<int8_t(uint8_t, uint8_t, uint8_t*, uint16_t)>::func =
-      std::bind(&hal::I2CMaster::read_device_memory, &_i2c, std::placeholders::_1,
+      std::bind(&hal::I2CMaster::readDeviceMemory, &_i2c, std::placeholders::_1,
                 std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
   bmi160_read_fptr_t read_func = static_cast<bmi160_read_fptr_t>(
       ReadCallback<int8_t(uint8_t, uint8_t, uint8_t*, uint16_t)>::read_callback);
 
   WriteCallback<int8_t(uint8_t, uint8_t, uint8_t*, uint16_t)>::func =
-      std::bind(&hal::I2CMaster::write_device_memory, &_i2c, std::placeholders::_1,
+      std::bind(&hal::I2CMaster::writeDeviceMemory, &_i2c, std::placeholders::_1,
                 std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
   bmi160_read_fptr_t write_func = static_cast<bmi160_read_fptr_t>(
       WriteCallback<int8_t(uint8_t, uint8_t, uint8_t*, uint16_t)>::write_callback);
@@ -67,7 +67,7 @@ IMU::IMU(const hal::I2CMaster& i2c, const uint8_t dev_addr) : _i2c(i2c)
   // Attach the callbacks
   _handle.read = read_func;
   _handle.write = write_func;
-  _handle.delay_ms = &delay_ms;
+  _handle.delay_ms = &delayMs;
 }
 
 bool IMU::init(const AccelRange accel_range, const GyroRange gyro_range)
@@ -134,7 +134,7 @@ bool IMU::init(const AccelRange accel_range, const GyroRange gyro_range)
   return (BMI160_OK == bmi160_set_sens_conf(&_handle));
 }
 
-bool IMU::perform_foc(void)
+bool IMU::performFOC(void)
 {
   bmi160_foc_conf foc_cfg;
   foc_cfg.acc_off_en = BMI160_ENABLE;
@@ -146,7 +146,7 @@ bool IMU::perform_foc(void)
   return (BMI160_OK == bmi160_start_foc(&foc_cfg, &_offsets, &_handle));
 }
 
-bool IMU::get_sensor_data(SensorData& data)
+bool IMU::getSensorData(SensorData& data)
 {
   bmi160_sensor_data accel;
   bmi160_sensor_data gyro;

@@ -3,6 +3,6 @@
 
 #include <cstdint>
 
-void delay_ms(const uint32_t delay_ms);
+void delayMs(const uint32_t delayMs);
 
 #endif  // TIMING_H

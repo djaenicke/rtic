@@ -42,8 +42,8 @@ class IMU
  public:
   IMU(const hal::I2CMaster& i2c, const uint8_t dev_addr);
   bool init(const AccelRange accel_range, const GyroRange gyro_range);
-  bool perform_foc(void);
-  bool get_sensor_data(SensorData& data);
+  bool performFOC(void);
+  bool getSensorData(SensorData& data);
 
  private:
   hal::I2CMaster _i2c;
