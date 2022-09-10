@@ -2,6 +2,21 @@
   <h1 align="center">RTIC</h1>
 </p>
 
+### The Hardware
+The Real Time Interface and Controller (RTIC) is a universal board for low-level robotics control and monitoring. The board can be ordered from [JLCPCB](https://jlcpcb.com/) using the [assembly](pcb/kicad/v2/assembly) and [gerber](pcb/kicad/v2/gerber) files.
+
+#### Key Features
+- 4 permanent magnet DC motor outputs
+- 4 quadrature encoder inputs
+- 6-axis IMU
+- NRF24L01 socket for wireless communications
+- USB (supports DFU via jumper)
+- CAN breakout header
+
+![](pcb/kicad/v2/rtic_v2.png?raw=true)
+
+A [compatible 4-wheeled mobile robot base](https://www.amazon.com/Moebius-Mecanum-Platform-Omni-direactional-Raspberry/dp/B083XS2SD7) can be purchased directly from Amazon. :robot:
+
 ### Tools Setup ✔️
 At a minium you will need the ARM GNU GCC Toolchain, Make and CMake to compile the source and generate executable artifacts.
 -   [ARM GNU GCC Toolchain - 10-2020-q4-major](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) - Other versions can be used but the current source is actively developed and tested using the 10-2020-q4-major release
@@ -24,22 +39,6 @@ As an alternative to the debuggging tools, dfu-util can be used to program the b
 To format all source files, you will need to install Clang-Format.
 -   [Clang-Format](https://clang.llvm.org/docs/ClangFormat.html)
     - Linux - ```sudo apt-get install clang-format```
-
-To write and execute unit tests on the firmware source, you will need to install the Ceedling unit test framework and the Python package gcovr to generate Cobertura html reports. Ceedling is a Ruby Gem, so Ruby must first be installed on your system. GCC and Make are also needed. If the developer is on Windows, you can find install instructions above.
--   [Ruby](https://www.ruby-lang.org)
-    - Windows - [RubyInstaller 2.7.3-1](https://github.com/oneclick/rubyinstaller2/releases/download/RubyInstaller-2.7.3-1/rubyinstaller-2.7.3-1-x64.exe)
-    - Linux - ```sudo apt-get install ruby```
--   [Ceedling](http://www.throwtheswitch.org/ceedling)
--   [Python](https://www.python.org/downloads/)
--   [gcovr](https://gcovr.com/en/stable/)
-    - ```python -m pip install gcovr```
-
-### Adding new source files 📁
-To add a new source file to the ```src/``` folder: From the root directory, use the Ceedling command below to create a new source ```.c``` and ```.h``` file. This will also create a unit test file in the ```test/``` folder for you.
-```c
-// Don't include a .c or .h in the filename
-$ ceedling module:create[FILENAME]
-```
 
 ### Compiling, Flashing & Testing ✨
 After a fresh clone, the ```setup``` scripts can be used to initialize the project. Passing ```release``` as an argument will generate a release build. Otherwise a ```debug``` build is generated.
