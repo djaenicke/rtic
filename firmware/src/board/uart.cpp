@@ -39,7 +39,7 @@ UART::UART(const uint8_t uart_instance, const GPIO& tx, const GPIO& rx, const ui
   HAL_UART_Init(&_handle);
 }
 
-void UART::transmit_blocking(const uint8_t* const buf, const uint16_t buf_len)
+void UART::transmitBlocking(const uint8_t* const buf, const uint16_t buf_len)
 {
   HAL_UART_Transmit(&_handle, (uint8_t*)buf, buf_len, HAL_MAX_DELAY);
 }

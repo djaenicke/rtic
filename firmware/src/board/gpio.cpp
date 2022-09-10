@@ -1,5 +1,7 @@
 #include "gpio.h"
 
+#include <cassert>
+
 namespace hal
 {
 GPIO::GPIO(const Pin& pin, const GpioMode mode, const GpioPullType pull, const uint8_t alt_function,
@@ -45,7 +47,7 @@ GPIO::GPIO(const Pin& pin, const GpioMode mode, const GpioPullType pull, const u
       _port_ptr = GPIOH;
       break;
     default:
-      // todo: assert
+      assert(0);
       _port_ptr = NULL;
       return;
   }
@@ -86,7 +88,7 @@ GPIO::GPIO(const Pin& pin, const GpioMode mode, const GpioPullType pull, const u
       hal_gpio.Mode = GPIO_MODE_IT_RISING_FALLING;
       break;
     default:
-      // todo: assert
+      assert(0);
       return;
   }
 
@@ -107,7 +109,7 @@ GPIO::GPIO(const Pin& pin, const GpioMode mode, const GpioPullType pull, const u
       hal_gpio.Pull = GPIO_PULLDOWN;
       break;
     default:
-      // todo: assert
+      assert(0);
       return;
   }
 

@@ -1,5 +1,7 @@
 #include "digital_out.h"
 
+#include <cassert>
+
 namespace hal
 {
 DigitalOut::DigitalOut(const Pin& pin) : GPIO(pin, GpioMode::OUTPUT_PUSH_PULL)
@@ -18,7 +20,7 @@ DigitalOut& DigitalOut::operator=(const uint8_t state)
   }
   else
   {
-    // todo: assert
+    assert(0);
   }
 
   return *this;
@@ -32,7 +34,7 @@ void DigitalOut::toggle(void)
   }
   else
   {
-    // todo: assert
+    assert(0);
   }
 }
 

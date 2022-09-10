@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 
+#include "cmsis_os.h"
+
 static void configSystemClock(void);
 static void errorHandler(void);
 
@@ -9,6 +11,15 @@ void initBoard(void)
 {
   HAL_Init();
   configSystemClock();
+}
+
+void delayMs(const uint32_t delay_ms)
+{
+  const TickType_t start_ticks = xTaskGetTickCount();
+  const TickType_t delay_ticks = delay_ms * portTICK_PERIOD_MS;
+  while ((xTaskGetTickCount() - start_ticks) < delay_ticks)
+  {
+  }
 }
 
 static void configSystemClock(void)

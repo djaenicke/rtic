@@ -1,5 +1,7 @@
 #include "quadrature_encoder.h"
 
+#include <cassert>
+
 namespace hal
 {
 static const uint8_t NUM_INTERRUPT_INPUTS = 5u;
@@ -10,7 +12,7 @@ static const int8_t LOOKUP_TABLE[] = { 0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0,
 static hal::QuadratureEncoder* interrupt_encoders[NUM_INTERRUPT_INPUTS];
 
 QuadratureEncoder::QuadratureEncoder(const Pin& cha, const Pin& chb, const EncoderPolarity polarity)
-    : HwTimer(0, TimerMode::ENCODER_4X_MODE, 0.0f),
+    : HwTimer(255, TimerMode::ENCODER_4X_MODE, 0.0f),
       _polarity(polarity),
       _timer_mode(false),
       _encoder_pulses(0),
@@ -20,7 +22,7 @@ QuadratureEncoder::QuadratureEncoder(const Pin& cha, const Pin& chb, const Encod
 {
   if ((cha.port == chb.port) && (cha.num == chb.num))
   {
-    // todo: assert
+    assert(0);
   }
 
   if ((cha.num >= MIN_SUPPORTED_INTERRUPT_PIN_NUM) && (cha.num <= MAX_SUPPORTED_INTERRUPT_PIN_NUM))
@@ -29,7 +31,7 @@ QuadratureEncoder::QuadratureEncoder(const Pin& cha, const Pin& chb, const Encod
   }
   else
   {
-    // todo: assert
+    assert(0);
   }
 
   if ((chb.num >= MIN_SUPPORTED_INTERRUPT_PIN_NUM) && (chb.num <= MAX_SUPPORTED_INTERRUPT_PIN_NUM))
@@ -38,7 +40,7 @@ QuadratureEncoder::QuadratureEncoder(const Pin& cha, const Pin& chb, const Encod
   }
   else
   {
-    // todo: assert
+    assert(0);
   }
 }
 

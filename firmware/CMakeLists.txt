@@ -48,16 +48,23 @@ set(APP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/digital_out.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/gpio.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/hw_timer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/i2c.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/pwm.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/quadrature_encoder.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/spi.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/uart.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/controls/manual_control.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/imu/bmi160.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/imu/imu_interface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/logging/serial_logger.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controller.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_controls.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/pid.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/serial_logger.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tb6612.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/voltage_monitor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/motors/motor_controller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/motors/motor_controls.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/motors/tb6612.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rf/rf_interface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/assert.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/pid.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/voltage_monitor.cpp
 )
 
 # Glob together a list of our SDK source
@@ -80,11 +87,20 @@ FILE(GLOB SDK_SRC
 set(APP_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/controls
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/imu
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/logging
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/motors
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/os_cfg
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rf
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils
 )
 
 # Set all of our application and SDK include paths
 set(INCLUDE_DIRS
     ${APP_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/bosch
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/nordic
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Core/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/st/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
@@ -129,6 +145,8 @@ include_directories(${INCLUDE_DIRS})
 add_executable(${EXECUTABLE_NAME}
     ${APP_SRC}
     ${SDK_SRC}
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/bosch/bmi160.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/nordic/nrf24.c
 )
 
 # Link against any specificed libs

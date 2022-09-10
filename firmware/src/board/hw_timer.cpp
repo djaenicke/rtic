@@ -1,5 +1,6 @@
 #include "hw_timer.h"
 
+#include <cassert>
 #include <cmath>
 
 namespace hal
@@ -62,8 +63,11 @@ HwTimer::HwTimer(const uint8_t timer_instance, const TimerMode mode, const float
       __HAL_RCC_TIM14_CLK_ENABLE();
       _timer_handle.Instance = TIM14;
       break;
+    case 255:
+      _timer_handle.Instance = NULL;
+      return;
     default:
-      // todo: assert
+      assert(0);
       _timer_handle.Instance = NULL;
       return;
   }
@@ -107,7 +111,7 @@ HwTimer::HwTimer(const uint8_t timer_instance, const TimerMode mode, const float
       initEncoderMode(TIM_ENCODERMODE_TI12);
       break;
     default:
-      // todo: assert
+      assert(0);
       return;
   }
 }

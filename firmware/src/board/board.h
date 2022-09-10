@@ -10,6 +10,8 @@ extern "C"
 {
 #endif
   void initBoard(void);
+
+  void delayMs(const uint32_t delayMs);
 #ifdef __cplusplus
 }
 #endif

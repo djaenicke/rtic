@@ -1,5 +1,7 @@
 #include "tb6612.h"
 
+#include <cassert>
+
 namespace tb6612
 {
 MotorDriver::MotorDriver(const hal::PwmPin& pwm, const hal::Pin& in1, const hal::Pin& in2,
@@ -40,7 +42,7 @@ void MotorDriver::setDirection(const Direction new_dir)
   }
   else
   {
-    // todo assert
+    assert(0);
   }
 }
 

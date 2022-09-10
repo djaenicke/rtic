@@ -32,7 +32,7 @@ void initSerialLogger(const LogLevel desired_logging_level)
   }
 
   logging_level = desired_logging_level;
-  serial.transmit_blocking((uint8_t*)buf, strnlen(buf, MAX_MSG_LEN));
+  serial.transmitBlocking((uint8_t*)buf, strnlen(buf, MAX_MSG_LEN));
 }
 
 void sendMessage(const LogLevel msg_log_level, const char* const msg)
@@ -47,15 +47,19 @@ void sendMessage(const LogLevel msg_log_level, const char* const msg)
 void threadSerialLogger(const void* argument)
 {
   static uint8_t tx_msg[MAX_MSG_LEN];
+  const TickType_t cycle_time_ticks = SERIAL_LOGGER_PERIOD_MS / portTICK_PERIOD_MS;
+
+  vTaskDelay(SERIAL_LOGGER_POST_INIT_DELAY_MS / portTICK_PERIOD_MS);
+  logMessage(LOG_DEBUG, "SerialLoggerThread started.\r\n");
+
   static TickType_t last_wake_time = xTaskGetTickCount();
-  const TickType_t cycle_time_ticks = SERIAL_LOGGER_PERIOD_MS * portTICK_PERIOD_MS;
 
   for (;;)
   {
     vTaskDelayUntil(&last_wake_time, cycle_time_ticks);
     if (pdTRUE == xQueueReceive(msg_queue_handle, (void*)tx_msg, 0))
     {
-      serial.transmit_blocking(tx_msg, strnlen((char*)tx_msg, MAX_MSG_LEN));
+      serial.transmitBlocking(tx_msg, strnlen((char*)tx_msg, MAX_MSG_LEN));
     }
   }
 }
